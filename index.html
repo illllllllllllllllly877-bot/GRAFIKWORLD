@@ -1,0 +1,2114 @@
+<!doctype html>
+<html lang="es">
+  <head>
+
+    <!--
+      =========================================================================
+      GUÍA DE COMENTARIOS DE ESTE ARCHIVO (busca estos símbolos con Ctrl+F)
+        ✏️ SE PUEDE EDITAR  → cambia textos, colores, números o datos con tranquilidad.
+        ⚠️ EDITAR CON CUIDADO → puedes cambiar textos y valores, pero NO los nombres
+                                (id, class, data-...) ni la estructura: el JavaScript
+                                los usa y, si los cambias, algo dejará de funcionar.
+        ⛔ NO TOCAR          → lógica interna. Si la modificas, la página puede romperse.
+      Consejo: antes de editar, guarda una copia del archivo.
+      =========================================================================
+    -->    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <!-- ✏️ SE PUEDE EDITAR: nombre que se ve en la pestaña del navegador -->
+    <title>GRAFIKWORLD</title> 
+<!-- ⚠️ EDITAR CON CUIDADO: tipografías de Google Fonts. Si cambias una fuente, cámbiala también en el CSS (font-family). -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;1,400&family=Archivo+Black&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+/* ✏️ SE PUEDE EDITAR: PALETA DE COLORES del modo CLARO. Cambia los códigos #hex para recolorear toda la página.
+         NO cambies los nombres (--bg, --ink, --cyan...) porque todo el CSS los usa.
+         */
+            :root{
+        /* PALETA PRINCIPAL (modo claro): cambia aquí los colores de toda la página */
+        --bg:#f4f3ef;
+        --surface:#ffffff;
+        --surface-2:#eceae3;
+        --ink:#16130e;
+        --ink-soft:#57534a;
+        --line:#16130e;
+        --cyan:#0090d4;
+        --magenta:#e5007d;
+        --yellow:#f5c400;
+        --green:#1d9e5f;
+        --red:#e23b2e;
+        --shadow:6px 6px 0 var(--ink);
+        --shadow-sm:3px 3px 0 var(--ink);
+        --radius:14px;
+      }
+/* ✏️ SE PUEDE EDITAR: PALETA del modo OSCURO (se activa sola si el celular/PC está en modo oscuro).
+         Mismos nombres de variables que la paleta clara; cambia solo los colores.
+         */
+            @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#131311;
+          --surface:#1e1e1b;
+          --surface-2:#2a2a26;
+          --ink:#f2efe6;
+          --ink-soft:#b6b1a4;
+          --line:#f2efe6;
+          --cyan:#35b6f0;
+          --magenta:#ff4da3;
+          --yellow:#ffd21f;
+          --shadow:6px 6px 0 rgba(0,0,0,.85);
+          --shadow-sm:3px 3px 0 rgba(0,0,0,.85);
+        }
+      }
+/* ⛔ NO TOCAR: reglas base del CSS (cajas, botones, enfoque con teclado). */
+            *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{
+        margin:0;background:var(--bg);color:var(--ink);
+        font-family:"Archivo",system-ui,sans-serif;
+        -webkit-font-smoothing:antialiased;
+      }
+      .mono{font-family:"IBM Plex Mono",monospace}
+      button{font-family:inherit;cursor:pointer}
+      button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+
+      /* ✏️ SE PUEDE EDITAR: estilos de la barra superior (alturas, colores, tamaño de letra). */
+      /* ---------- Barra superior ---------- */
+      .topbar{
+        position:sticky;top:0;z-index:50;
+        display:flex;align-items:center;justify-content:space-between;gap:12px;
+        padding:10px 16px;background:var(--bg);border-bottom:2px solid var(--line);
+      }
+      .topbar .brand{font-family:"Archivo Black",sans-serif;font-size:15px;letter-spacing:.02em;display:flex;align-items:center;gap:9px}
+      .cmyk-dots{display:inline-flex;gap:3px}
+      .cmyk-dots i{width:11px;height:11px;border-radius:50%;display:block;border:1.5px solid var(--ink)}
+      .cmyk-dots i:nth-child(1){background:var(--cyan)}
+      .cmyk-dots i:nth-child(2){background:var(--magenta)}
+      .cmyk-dots i:nth-child(3){background:var(--yellow)}
+      .cmyk-dots i:nth-child(4){background:var(--ink)}
+      .score-chip{
+        display:flex;align-items:center;gap:8px;background:var(--yellow);color:#16130e;
+        border:2px solid var(--ink);border-radius:999px;padding:5px 14px 5px 8px;
+        font-weight:700;font-size:14px;box-shadow:var(--shadow-sm);
+      }
+      .score-chip .star{background:#16130e;color:var(--yellow);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-size:12px}
+      .score-chip small{font-weight:600;opacity:.65}
+
+      /* ✏️ SE PUEDE EDITAR: estilos de la portada (título grande, espaciado, etiquetas). */
+      /* ---------- Portada (Ajustado el espaciado para que el amarillo no se coma las letras de arriba) ---------- */
+      .hero{padding:42px 16px 16px;max-width:1080px;margin:0 auto}
+      .hero h1{
+        font-family:"Archivo Black",sans-serif;
+        font-size:clamp(36px,8vw,72px);line-height:1.22;margin:0 0 18px;
+        text-transform:uppercase;letter-spacing:-.01em;
+      }
+      .hero h1 .w-c{color:var(--cyan)} .hero h1 .w-m{color:var(--magenta)} .hero h1 .w-y{background:var(--yellow);color:#16130e;padding:0.08em 0.18em;border-radius:6px;display:inline-block;margin-top:4px;}
+      .hero p{font-size:clamp(15px,2.6vw,19px);color:var(--ink-soft);max-width:640px;margin:0 0 20px;line-height:1.5}
+      .areas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+      .areas span{
+        font-size:12.5px;font-weight:700;border:2px solid var(--line);border-radius:999px;
+        padding:4px 11px;background:var(--surface);
+      }
+      .areas span:nth-child(4n+1){background:var(--cyan);color:#fff;border-color:var(--ink)}
+      .areas span:nth-child(4n+2){background:var(--magenta);color:#fff}
+      .areas span:nth-child(4n+3){background:var(--yellow);color:#16130e}
+
+      /* ✏️ SE PUEDE EDITAR: estilos de las tarjetas del menú (columnas, bordes, sombras). */
+      /* ---------- Rejilla de juegos ---------- */
+      main{max-width:1080px;margin:0 auto;padding:10px 16px 60px}
+      .section-title{font-family:"Archivo Black",sans-serif;font-size:22px;text-transform:uppercase;margin:30px 0 14px;display:flex;align-items:baseline;gap:10px}
+      .section-title small{font-family:"Archivo",sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);text-transform:none}
+      .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+      .card{
+        background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);
+        box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:10px;
+      }
+      .card .tag{
+        align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+        padding:3px 9px;border-radius:999px;border:2px solid var(--ink);color:#16130e;
+      }
+      .tag.c{background:var(--cyan);color:#fff}.tag.m{background:var(--magenta);color:#fff}
+      .tag.y{background:var(--yellow)}.tag.k{background:var(--surface-2);color:var(--ink)}
+      .card h3{font-family:"Archivo Black",sans-serif;font-size:21px;margin:0;line-height:1.1}
+      .card p{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.5;flex:1}
+      .card .foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+      .card .best{font-size:13px;font-weight:700;color:var(--ink-soft)}
+      .card .best b{color:var(--ink)}
+      .btn{
+        background:var(--ink);color:var(--bg);border:2px solid var(--ink);border-radius:10px;
+        font-weight:700;font-size:15px;padding:10px 18px;box-shadow:var(--shadow-sm);
+        transition:transform .08s ease, box-shadow .08s ease;
+      }
+      .btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+      .btn.ghost{background:var(--surface);color:var(--ink)}
+      .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+
+      /* ⚠️ EDITAR CON CUIDADO: estilos generales de la pantalla de cada juego.
+         Cambia colores y tamaños; no renombres las clases (.game, .open, .hidden...): el JavaScript las usa para abrir y cerrar pantallas.
+         */
+      /* ---------- Vista de juego ---------- */
+      .game{display:none}
+      .game.open{display:block}
+      .game-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:22px 0 6px}
+      .back-btn{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px;box-shadow:var(--shadow-sm)}
+      .back-btn:active{transform:translate(2px,2px);box-shadow:none}
+      .game-head h2{font-family:"Archivo Black",sans-serif;font-size:clamp(24px,5vw,36px);margin:0;text-transform:uppercase}
+      .game-sub{color:var(--ink-soft);font-size:15px;line-height:1.5;max-width:680px;margin:4px 0 18px}
+      .panel{
+        background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);
+        box-shadow:var(--shadow);padding:22px;
+      }
+      .hud{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+      .hud .stat{
+        background:var(--surface-2);border:2px solid var(--line);border-radius:10px;
+        padding:6px 13px;font-weight:700;font-size:14px;
+      }
+      .hud .stat span{color:var(--ink-soft);font-weight:600;margin-right:5px}
+      .feedback{min-height:26px;font-weight:700;font-size:16px;margin:12px 0 4px}
+      .feedback.ok{color:var(--green)} .feedback.bad{color:var(--red)}
+      .explain{color:var(--ink-soft);font-size:14.5px;line-height:1.5;margin:0 0 6px;max-width:640px}
+      .options{display:grid;gap:10px;margin-top:14px}
+      .options.two{grid-template-columns:1fr 1fr}
+      @media (max-width:560px){.options.two{grid-template-columns:1fr}}
+      .opt{
+        text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:10px;
+        padding:13px 16px;font-size:15.5px;font-weight:600;color:var(--ink);
+        transition:transform .07s ease;
+      }
+      .opt:hover:not(:disabled){transform:translate(-1px,-1px)}
+      .opt:disabled{cursor:default;opacity:.85}
+      .opt.right{background:var(--green);border-color:var(--ink);color:#fff}
+      .opt.wrong{background:var(--red);border-color:var(--ink);color:#fff}
+      .opt .cat{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;opacity:.75;display:block;margin-bottom:3px}
+
+/* ⚠️ EDITAR CON CUIDADO: desde aquí hasta "BLOQUE 1" están los estilos de cada juego (HEX, Memoria, Ojo clínico, Mezcla,
+         Línea de tiempo, Tipografía, Ahorcado, Verdadero/Falso). Puedes cambiar colores, tamaños y espacios; NO los nombres de clase.
+         */
+            /* HEX */
+      .hex-swatch{height:170px;border:2px solid var(--line);border-radius:12px;margin-bottom:6px}
+      .hex-code{font-size:19px;font-weight:700;text-align:center}
+
+      /* Memoria */
+      .memory-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:520px}
+      @media (max-width:480px){.memory-board{grid-template-columns:repeat(4,1fr);gap:7px}}
+      .mem-card{
+        aspect-ratio:1;border:2px solid var(--line);border-radius:12px;background:var(--ink);
+        display:grid;place-items:center;font-size:12px;font-weight:700;color:transparent;
+        padding:4px;text-align:center;line-height:1.15;user-select:none;
+      }
+      .mem-card .back-mark{font-family:"Archivo Black",sans-serif;font-size:22px;color:var(--bg)}
+      .mem-card.flipped{color:#16130e}
+      .mem-card.matched{opacity:.45;pointer-events:none}
+      .mem-card small{display:block;font-weight:600;font-size:10.5px;margin-top:2px}
+
+      /* Ojo clínico */
+      .eye-board{display:grid;gap:6px;max-width:480px;margin:0 auto}
+      .eye-tile{aspect-ratio:1;border-radius:8px;border:2px solid rgba(0,0,0,.18);padding:0}
+      .eye-tile:active{transform:scale(.96)}
+
+      /* Mezcla */
+      .mix-target{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+      .mix-target .big{width:96px;height:96px;border-radius:14px;border:2px solid var(--line)}
+      .mix-target .name{font-family:"Archivo Black",sans-serif;font-size:24px;text-transform:uppercase}
+      .mix-pair{display:flex;align-items:center;gap:10px}
+      .mix-pair .chip-s{width:44px;height:44px;border-radius:10px;border:2px solid var(--line)}
+      .mix-pair .plus{font-family:"Archivo Black",sans-serif;font-size:20px}
+
+      /* Línea de tiempo */
+      .tl-slots{display:grid;gap:8px;margin-bottom:18px}
+      .tl-slot{
+        border:2px dashed var(--ink-soft);border-radius:10px;padding:10px 14px;min-height:48px;
+        display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-soft);
+      }
+      .tl-slot.filled{border:2px solid var(--line);background:var(--surface-2);color:var(--ink)}
+      .tl-slot .num{background:var(--ink);color:var(--bg);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:13px;flex:none;font-weight:700}
+      .tl-slot.good{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,var(--surface))}
+      .tl-slot.badslot{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--surface))}
+      .tl-pool{display:flex;flex-wrap:wrap;gap:9px}
+      .tl-chip{
+        background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:9px 15px;
+        font-weight:700;font-size:14.5px;box-shadow:var(--shadow-sm);
+      }
+      .tl-chip:active{transform:translate(2px,2px);box-shadow:none}
+      .tl-chip.used{visibility:hidden}
+
+      /* Tipografía */
+      .type-stage{
+        border:2px solid var(--line);border-radius:12px;background:var(--surface-2);
+        min-height:170px;display:grid;place-items:center;padding:20px;text-align:center;margin-bottom:6px;
+      }
+      .type-sample{font-size:clamp(44px,10vw,84px);line-height:1.05;color:var(--ink)}
+      .type-sample.small{font-size:clamp(24px,5.5vw,38px);line-height:1.3}
+      .f-serif{font-family:Georgia,"Times New Roman",serif}
+      .f-sans{font-family:Arial,Helvetica,sans-serif}
+      .f-mono{font-family:"Courier New",monospace}
+      .f-script{font-family:"Brush Script MT","Segoe Script","Snell Roundhand",cursive}
+      .f-display{font-family:"Archivo Black",sans-serif;letter-spacing:.01em}
+
+      /* Ahorcado */
+      .hang-word{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0}
+      .hang-word .cell{
+        width:38px;height:48px;border-bottom:4px solid var(--line);display:grid;place-items:center;
+        font-family:"Archivo Black",sans-serif;font-size:23px;
+      }
+      .hang-word .cell.space{border-bottom:none;width:16px}
+      .keyboard{display:flex;flex-wrap:wrap;gap:6px;max-width:560px}
+      .key{
+        width:40px;height:44px;border:2px solid var(--line);border-radius:9px;background:var(--surface);
+        font-weight:700;font-size:16px;box-shadow:2px 2px 0 var(--ink);
+      }
+      .key:active{transform:translate(2px,2px);box-shadow:none}
+      .key.hit{background:var(--green);color:#fff}
+      .key.miss{background:var(--surface-2);color:var(--ink-soft);opacity:.5;box-shadow:none}
+      .key:disabled{cursor:default}
+      .lives{font-size:19px;letter-spacing:3px}
+
+      /* Verdadero / Falso */
+      .vf-statement{
+        font-size:clamp(19px,4.4vw,26px);font-weight:700;line-height:1.35;text-align:center;
+        padding:26px 14px;border:2px solid var(--line);border-radius:12px;background:var(--surface-2);margin-bottom:16px;
+      }
+      .vf-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .vf-btns button{padding:16px;font-size:18px;font-weight:800;border-radius:12px;border:2px solid var(--ink);box-shadow:var(--shadow-sm)}
+      .vf-btns button:active{transform:translate(3px,3px);box-shadow:none}
+      .btn-true{background:var(--green);color:#fff}
+      .btn-false{background:var(--red);color:#fff}
+      .timerbar{height:12px;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface-2);margin-bottom:14px}
+      .timerbar i{display:block;height:100%;background:var(--magenta);width:100%;transition:width .2s linear}
+
+      .end-box{text-align:center;padding:14px 0 4px}
+      .end-box .big-score{font-family:"Archivo Black",sans-serif;font-size:52px;line-height:1}
+      .end-box p{color:var(--ink-soft)}
+      .end-box .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+
+      footer{max-width:1080px;margin:0 auto;padding:0 16px 44px;color:var(--ink-soft);font-size:13.5px}
+      .hidden{display:none !important}
+      @media (prefers-reduced-motion: reduce){
+        *{transition:none !important;scroll-behavior:auto !important}
+      }
+
+      /* =====================================================
+         BLOQUE 1: PERSONAJE GUIDO (Animaciones, burbujas y controles)
+         Modificable: aquí puedes ajustar el tamaño, velocidad, y comportamientos del personaje Guido.
+         ===================================================== */
+/* ✏️ SE PUEDE EDITAR: personaje GUIDO (tamaño, velocidad, burbujas). La lógica de movimiento está más abajo (BLOQUE 2). */
+            .card{transition:transform .15s ease,box-shadow .15s ease}
+      .card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+      .tl-chip.sel{background:var(--ink);color:var(--bg)}
+      .sw{width:38px;height:38px;border-radius:50%;border:3px solid var(--line);padding:0}
+      .sw.sel{outline:3px solid var(--cyan);outline-offset:2px}
+      .ctl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+      .ctl-t{font-weight:700;font-size:13px;margin-top:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+      .hs{cursor:pointer}.hs.show rect{stroke:#e23b2e;stroke-width:3;fill:rgba(226,59,46,.18)}
+      .guido{position:fixed;z-index:40;width:40px;height:64px;pointer-events:auto;cursor:grab;touch-action:none;user-select:none}
+      .guido svg{width:100%;height:100%;overflow:visible}
+      /* ⛔ NO TOCAR: animaciones de caída, golpe y sueño de Guido (@keyframes). Solo tocar si sabes CSS. */
+      /* Animaciones de Guido: caer (fall), estrellarse de cara (lie) y dormir (sleep) */
+      .guido.fall .a1,.guido.fall .a2{animation:gca .15s ease-in-out infinite alternate}
+      .guido.fall svg{transform:rotate(-12deg)}
+      .guido.lie svg,.guido.sleep svg{transform-origin:50% 100%}
+      .guido.lie svg{animation:gplant .7s ease-in forwards}
+      .guido.sleep svg{transform:rotate(-90deg)}
+      .guido.sleep::after{content:"Z z z";position:absolute;left:-34px;top:2px;font:700 14px "Archivo Black",sans-serif;color:var(--ink-soft);animation:gz 2.2s ease-in-out infinite}
+      @keyframes gplant{0%{transform:rotate(0)}55%{transform:rotate(98deg)}75%{transform:rotate(84deg)}100%{transform:rotate(90deg)}}
+      @keyframes gz{0%{opacity:0;transform:translateY(8px)}50%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+      .guido .lg1,.guido .lg2,.guido .a1,.guido .a2{transform-box:fill-box;transform-origin:50% 0}
+      .guido.walk .lg1,.guido.walk .a2{animation:gsw .45s ease-in-out infinite alternate}
+      .guido.walk .lg2,.guido.walk .a1{animation:gsw .45s ease-in-out infinite alternate-reverse}
+      .guido.climb .a1{animation:gca .5s ease-in-out infinite alternate}
+      .guido.climb .a2{animation:gca .5s ease-in-out infinite alternate-reverse}
+      .guido.climb .lg1{animation:gsw .5s ease-in-out infinite alternate}
+      .guido.climb .lg2{animation:gsw .5s ease-in-out infinite alternate-reverse}
+      @keyframes gsw{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+      @keyframes gca{from{transform:rotate(150deg)}to{transform:rotate(205deg)}}
+      .gbub{position:fixed;right:12px;bottom:80px;max-width:250px;z-index:60;background:var(--surface);border:2px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);padding:12px 14px;font-size:14px;line-height:1.4;cursor:pointer}
+      .gbub b{font-family:"Archivo Black",sans-serif}
+      @media (prefers-reduced-motion:reduce){.guido *{animation:none !important}}
+
+      /* ⚠️ EDITAR CON CUIDADO: diseño de la pantalla de registro / inicio de sesión (colores, bordes, tamaños). No renombres clases ni ids. */
+      /* ===== ESTILOS DE LA PANTALLA DE ACCESO (registro / inicio de sesión) ===== */
+      .hidden{display:none !important}
+      .auth{position:fixed;inset:0;height:100dvh;z-index:100;background:var(--bg);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom))}
+      .auth-card{width:100%;max-width:400px;margin:auto;background:var(--surface);border:2px solid var(--line);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:26px}
+      .auth-card h1{font-family:"Archivo Black",sans-serif;font-size:28px;line-height:1.05;margin:0 0 6px}
+      .auth-card label{font-size:13px;font-weight:700}
+      .auth-card input{width:100%;padding:12px;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--bg);color:var(--ink);margin:4px 0 10px}
+      .auth-tabs{display:flex;gap:8px;margin:14px 0}
+      .auth-msg{min-height:20px;font-size:14px;margin:6px 0}
+
+      /* =====================================================
+         TEMA PROFESIONAL Y UX/UI: acabado visual general
+         (degradados suaves, bordes redondeados, refinamiento tipográfico, pulido visual estilo marca global)
+         ===================================================== */
+      body{background-image:radial-gradient(900px 500px at 8% -8%,rgba(0,144,212,.13),transparent 60%),radial-gradient(800px 480px at 100% 0,rgba(229,0,125,.10),transparent 55%);background-attachment:fixed}
+      .topbar{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+      .card{border-radius:20px;overflow:hidden}
+      .btn{border-radius:12px;transition:transform .12s ease,box-shadow .12s ease,filter .12s}
+      .btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(1px)}
+      .panel{border-radius:20px;padding:clamp(16px,3vw,28px)}
+      .game-head h2{letter-spacing:-.01em}
+      .hud{display:flex;gap:10px;flex-wrap:wrap}
+      .stat{border-radius:12px}
+      .opt{border-radius:14px;transition:transform .12s,box-shadow .12s,background .12s}
+      .opt:not(:disabled):hover{transform:translateY(-2px)}
+      .opt.right{animation:gpop .35s ease}.opt.wrong{animation:gshake .3s ease}
+      @keyframes gpop{50%{transform:scale(1.04)}}
+      @keyframes gshake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+      .prog{height:10px;border:2px solid var(--line);border-radius:99px;overflow:hidden;margin:12px 0;background:var(--surface-2,#eceae3)}
+      .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan,#0090d4),var(--magenta,#e5007d),var(--yellow,#f5c400));transition:width .45s ease}
+      .lv-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:12px 0}
+      .lv{text-align:left;cursor:pointer;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-left:10px solid var(--c);border-radius:14px;padding:14px 16px;font:inherit;transition:transform .12s,box-shadow .12s}
+      .lv:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--c)}
+      .lv b{display:block;font-size:18px;margin-bottom:4px}.lv span{font-size:13px;color:var(--ink-soft)}
+      .lv.e{--c:#1d9e5f}.lv.n{--c:#0090d4}.lv.h{--c:#e5007d}
+      .end-box{text-align:center;padding:18px 6px}
+      .big-score{font-family:"Archivo Black",sans-serif;font-size:clamp(40px,9vw,64px);line-height:1}
+      #goalbar{position:fixed;top:0;left:0;right:0;height:5px;z-index:95}
+      #goalbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0090d4,#e5007d,#f5c400);transition:width .6s ease}
+      .win{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+      .win-card{position:relative;z-index:2;background:var(--surface);color:var(--ink);border:3px solid var(--line);border-radius:22px;box-shadow:8px 8px 0 var(--ink);padding:30px;max-width:420px;text-align:center}
+      .win-card h2{font-family:"Archivo Black",sans-serif;font-size:34px;margin:6px 0}
+      .conf{position:absolute;top:-20px;width:10px;height:16px;animation:gconf linear forwards}
+      @keyframes gconf{to{transform:translateY(110vh) rotate(720deg)}}
+
+      /* ⚠️ EDITAR CON CUIDADO: estilos del estudio de logos y banners, iconos y estrellas. Solo colores y tamaños. */
+      /* ===== ESTUDIO DE DISEÑO (logos y banners), iconos, pista y estrellas ===== */
+      .studio{display:grid;grid-template-columns:minmax(260px,350px) 1fr;gap:22px;align-items:start}
+      .pv{position:sticky;top:76px;background:var(--surface-2,#eceae3);border:2px solid var(--line);border-radius:16px;padding:14px}
+      .ctls{min-width:0}
+      .grp{margin-bottom:6px}
+      .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+      .ic-btn{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:74px;padding:8px 6px;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-radius:12px;font:inherit;font-size:12px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+      .ic-btn svg{width:26px;height:26px}
+      .ic-btn:hover{transform:translateY(-2px)}
+      .ic-btn.sel{background:var(--ink);color:var(--bg)}
+      .fld{display:block;font-size:13px;font-weight:700;margin:8px 0}
+      .fld input{display:block;width:100%;margin-top:4px;padding:11px 12px;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--surface);color:var(--ink)}
+      .sw{transition:transform .12s}.sw:hover{transform:scale(1.1)}
+      button:focus-visible,input:focus-visible{outline:3px solid var(--cyan,#0090d4);outline-offset:2px}
+      .hs.hint rect{stroke:#0090d4;stroke-width:3;fill:rgba(0,144,212,.18);animation:ghint .5s ease-in-out 3}
+      @keyframes ghint{50%{opacity:.35}}
+      .stars{font-size:36px;color:#f5c400;letter-spacing:6px;text-shadow:1px 1px 0 rgba(0,0,0,.25)}
+      @media (max-width:760px){.studio{grid-template-columns:1fr}.pv{position:static}}
+
+      /* ⚠️ EDITAR CON CUIDADO: estilos de la tabla de ranking. Solo colores, tamaños y espacios. */
+      /* ===== RANKING ===== */
+      .rk-card{max-width:520px;width:100%;max-height:88vh;overflow:auto;text-align:left}
+      .rk-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;margin:6px 0;background:var(--surface)}
+      .rk-row.me{outline:3px solid var(--cyan,#0090d4);outline-offset:1px}
+      .rk-pos{width:36px;text-align:center;font:700 18px "Archivo Black",sans-serif}
+      .rk-name{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .rk-pts{font:700 14px "IBM Plex Mono",monospace}
+
+      /* ⚠️ EDITAR CON CUIDADO: reglas @media para pantallas pequeñas. Puedes ajustar tamaños; no cambies los puntos de corte si no los entiendes. */
+      /* ===== ADAPTACIÓN A CELULAR Y COMPUTADOR ===== */
+      html,body{max-width:100%;overflow-x:clip}
+      img,svg,video{max-width:100%}
+      .topbar{justify-content:flex-end;gap:10px}
+      .topbar .brand{margin-right:auto;min-width:0;white-space:nowrap}
+      .topbar > .back-btn{white-space:nowrap;min-height:40px}
+      @media (max-width:640px){
+        .topbar{flex-wrap:wrap;justify-content:flex-start;padding:8px 12px;gap:8px}
+        .topbar .brand{order:1;flex:1 1 100%;margin:0;font-size:13px}
+        .topbar > .back-btn{order:2;flex:1 1 0;min-width:0;padding:7px 6px;font-size:12.5px;line-height:1.1;white-space:normal;text-align:center}
+        .topbar .score-chip{order:3;flex:0 0 auto;padding:4px 10px 4px 6px;font-size:13px}
+        .hero{padding:24px 14px 4px}
+        main{padding:8px 14px 48px}
+        .section-title{flex-wrap:wrap;margin:22px 0 12px}
+        .grid{grid-template-columns:1fr}
+        .panel{padding:14px}
+      }
+      @media (max-width:380px){.topbar .brand{font-size:12px}}
+
+      /* ⚠️ EDITAR CON CUIDADO: estilos del menú desplegable de la barra superior. */
+      /* ===== MENÚ DESPLEGABLE DE LA BARRA SUPERIOR ===== */
+      .tb-menu{display:none;position:absolute;right:12px;top:100%;margin-top:8px;z-index:60;min-width:220px;flex-direction:column;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:8px}
+      .tb-menu.open{display:flex;animation:gmenu .15s ease-out}
+      @keyframes gmenu{from{opacity:0;transform:translateY(-6px)}}
+      .tb-menu .back-btn{display:block;width:100%;min-height:46px;text-align:left;border-radius:10px;box-shadow:none;white-space:nowrap;padding:11px 14px;font-size:15px;flex:none}
+      .tb-menu .back-btn:hover{background:var(--surface-2,#eceae3)}
+      #menuBtn{order:0;flex:0 0 auto;white-space:nowrap;padding:8px 14px}
+      @media (max-width:640px){
+        .topbar{flex-wrap:nowrap;justify-content:flex-start;align-items:center}
+        .topbar .brand{order:0;flex:1 1 auto;min-width:0;font-size:12px;line-height:1.1;white-space:normal}
+        .topbar .score-chip{order:0;flex:0 0 auto}
+        #menuBtn{padding:8px 11px}
+        #menuBtn span{display:none}
+        .tb-menu{left:12px;right:12px;min-width:0}
+      }
+    
+      /* ✏️ SE PUEDE EDITAR: diseño de la pantalla de bienvenida (colores, círculos, animaciones, tamaños). */
+      /* ---------- PANTALLA DE BIENVENIDA (antes del inicio de sesión) ---------- */
+      .splash{position:fixed;inset:0;height:100dvh;z-index:120;background:var(--bg);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;padding:max(20px,env(safe-area-inset-top)) 20px max(28px,env(safe-area-inset-bottom));text-align:center;transition:opacity .5s ease,transform .5s ease,visibility .5s}
+      .splash.out{opacity:0;transform:scale(1.04);visibility:hidden;pointer-events:none}
+      .splash .blob{position:fixed;pointer-events:none;z-index:0;border-radius:50%;border:3px solid var(--ink);opacity:.9;animation:splashFloat 9s ease-in-out infinite}
+      .splash .b1{width:clamp(120px,24vw,260px);aspect-ratio:1;background:var(--cyan);top:-4%;left:-4%}
+      .splash .b2{width:clamp(90px,18vw,200px);aspect-ratio:1;background:var(--magenta);bottom:8%;left:8%;animation-delay:-3s}
+      .splash .b3{width:clamp(110px,20vw,230px);aspect-ratio:1;background:var(--yellow);top:10%;right:-3%;animation-delay:-5s}
+      .splash .b4{width:clamp(60px,10vw,110px);aspect-ratio:1;background:var(--ink);bottom:-3%;right:14%;animation-delay:-7s}
+      .splash .blob.ring{background:transparent;border-width:6px;width:clamp(140px,26vw,300px);aspect-ratio:1;bottom:20%;right:-6%;border-color:var(--magenta);animation-delay:-2s}
+      @keyframes splashFloat{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(14px,-18px) rotate(6deg)}}
+      .splash-inner{position:relative;z-index:2;width:100%;margin:auto;max-width:720px;display:flex;flex-direction:column;align-items:center;gap:20px}
+      .splash .kicker{display:inline-flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;box-shadow:var(--shadow-sm)}
+      .splash h1{font-family:"Archivo Black",sans-serif;font-size:clamp(40px,9vw,88px);line-height:1.15;margin:0;text-transform:uppercase;letter-spacing:-.01em;animation:splashUp .7s .1s both}
+      .splash h1 .w-c{color:var(--cyan)} .splash h1 .w-m{color:var(--magenta)}
+      .splash h1 .w-y{background:var(--yellow);color:#16130e;padding:.06em .16em;border-radius:8px;display:inline-block;margin-top:6px;border:3px solid var(--ink);box-shadow:var(--shadow)}
+      .splash p{margin:0;font-size:clamp(15px,2.6vw,19px);line-height:1.5;color:var(--ink-soft);max-width:560px;animation:splashUp .7s .25s both}
+      .splash .areas{justify-content:center;max-width:620px;animation:splashUp .7s .4s both}
+      .splash .btn.go{font-size:18px;padding:14px 30px;border-radius:14px;box-shadow:var(--shadow);animation:splashUp .7s .55s both;transition:transform .15s,box-shadow .15s}
+      .splash .btn.go:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+      .splash .btn.go:active{transform:translate(3px,3px);box-shadow:var(--shadow-sm)}
+      .splash .hint{font-size:12.5px;color:var(--ink-soft);animation:splashUp .7s .7s both}
+      @keyframes splashUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion:reduce){.splash *,.splash{animation:none !important;transition:none !important}}
+
+      /* ✏️ Bienvenida: ajustes para celular, pantallas bajas (celular horizontal) y computador */
+      .splash h1 .w-y{max-width:100%}
+      @media (max-width:480px){
+        .splash{padding-left:16px;padding-right:16px}
+        .splash h1{font-size:clamp(32px,11vw,46px)}
+        .splash .btn.go{width:100%;max-width:340px;font-size:17px;padding:14px 18px}
+        .splash .kicker{font-size:11px;letter-spacing:.08em}
+      }
+      @media (max-height:700px){
+        .splash-inner{gap:12px}
+        .splash h1{font-size:clamp(28px,6.5vw,52px)}
+        .splash .areas{display:none}
+      }
+      @media (min-width:1100px) and (min-height:760px){.splash-inner{gap:26px}}
+
+      /* ✏️ Compatibilidad general celular + computador */
+      html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+      button,.btn,.card{touch-action:manipulation}
+      .rk-card{max-height:88dvh}
+      @media (max-width:640px){
+        input,select,textarea{font-size:16px} /* evita que el iPhone haga zoom al escribir */
+        .auth-card{padding:20px}
+        .auth-card h1{font-size:24px}
+      }
+
+      /* ✏️ SE PUEDE EDITAR: ÁLBUM DE PERSONAJES (tamaño de los NPC, repisas, placas de nombre). Los nombres de clase (.alb-...) los usa el JavaScript del álbum.
+         --aw y --ah = ancho y alto de cada NPC. Guido toma el mismo tamaño cuando está en el álbum, así queda igual que los demás. */
+      :root{--aw:44px;--ah:70px}
+      @media (min-width:700px){:root{--aw:56px;--ah:90px}}
+      .guido.alb{width:var(--aw);height:var(--ah)}
+      .album{padding:6px 0 40px}
+      .alb-row{position:relative;display:grid;grid-template-columns:repeat(var(--cols,7),1fr);gap:10px 6px;justify-items:center;align-items:end;padding:14px 0 10px;margin-bottom:18px}
+      .alb-row.solo{grid-template-columns:1fr}
+      /* repisa de madera: los NPC y Guido se paran sobre ella. Mide 10 px de alto (igual que el padding de abajo de la fila; el JavaScript usa ese número) y ocupa todo el ancho de la pantalla */
+      .alb-row::after{content:"";position:absolute;left:50%;bottom:0;width:100vw;height:10px;transform:translateX(-50%);background:linear-gradient(#9a6a43,#6b4429);border-radius:2px;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+      .alb-slot{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;max-width:130px}
+      .alb-name{max-width:100%;text-align:center;font-weight:800;font-size:clamp(11px,2.8vw,13px);line-height:1.15;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:2px 9px;box-shadow:2px 2px 0 var(--ink)}
+      .alb-fig{width:var(--aw);height:var(--ah)}
+      .alb-fig svg{width:100%;height:100%;display:block;overflow:visible}
+      .alb-fig img{width:100%;height:100%;object-fit:contain;display:block}
+      .alb-fig.ghost img{display:none} /* la imagen de Guido solo se ve cuando él llega */
+      .alb-slot.here .alb-fig.ghost.has-img img{display:block}
+      .alb-slot.here .alb-fig.ghost.has-img svg{display:none}
+      .alb-slot.solo .alb-fig{width:calc(var(--aw) * 1.25);height:calc(var(--ah) * 1.25)}
+      .alb-slot.solo .alb-name{background:var(--yellow);color:#16130e;border-color:var(--ink)}
+      .alb-fig.ghost svg{filter:grayscale(1) brightness(.35);opacity:.16} /* silueta del espacio vacío de Guido */
+      .alb-slot.here .alb-fig.ghost svg{filter:none;opacity:1} /* cuando Guido llega, la silueta se llena de color: Guido se convierte en un NPC estático como los demás */
+
+      /* ✏️ EASTER EGG: los 4 puntos de colores de la barra superior. Con 4 clics (cualquier combinación) aparece la tarjeta del álbum en el menú. */
+      .topbar .cmyk-dots i{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+      .topbar .cmyk-dots i::after{content:"";position:absolute;inset:-4px}
+      .topbar .cmyk-dots i.tap{animation:eggTap .22s ease-out}
+      @keyframes eggTap{50%{transform:scale(1.7)}}
+      .card.egg-new{animation:eggCard 1.1s ease-in-out 3}
+      @keyframes eggCard{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 0 0 4px var(--yellow),0 0 28px rgba(229,0,125,.6)}}
+      @media (prefers-reduced-motion:reduce){.topbar .cmyk-dots i.tap,.card.egg-new{animation:none}}
+
+
+      /* ✏️ IMÁGENES DE GUIDO (solo si GUIDO_IMAGENES = true): tamaño del cuadro de imagen. Los PNG miden 256 x 256 y el personaje ocupa casi todo el alto. */
+      .guido .gimg{display:none;position:absolute;left:50%;bottom:-1px;width:64px;height:64px;margin-left:-32px;max-width:none;object-fit:contain;pointer-events:none;user-select:none}
+      .guido.spr .gimg{display:block}
+      .guido.spr > svg{visibility:hidden}
+      .guido.alb .gimg{width:var(--ah);height:var(--ah);margin-left:calc(var(--ah) / -2)}
+
+      /* ✏️ LOGO de la barra superior: cuadro vacío a la izquierda del nombre. Cambia width/height para hacerlo más grande o más pequeño. */
+      .topbar .tb-logo{flex:0 0 auto;width:38px;height:38px;border:2px dashed var(--line);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;margin-right:6px}
+      .topbar .tb-logo.has-img{border:0}
+      .topbar .tb-logo img{width:100%;height:100%;object-fit:contain;display:block}
+      @media (max-width:640px){.topbar .tb-logo{width:30px;height:30px;margin-right:2px}}
+    </style>
+  </head>
+  <body>
+    <!-- ⚠️ EDITAR CON CUIDADO: puedes cambiar el texto "GRAFIKWORLD · ART & MIND". NO cambies id="totalPoints" (ahí se muestran los puntos). -->
+    <!-- ===== BARRA SUPERIOR: nombre del sitio, botón de Guido y marcador de puntos ===== -->
+    <div class="topbar">
+      <div class="brand">
+        <!-- ✏️ AQUÍ VA EL LOGO: es el cuadro vacío de la izquierda. Cuando tengas la imagen, escribe su ruta en LOGO_IMG (busca LOGO_IMG con Ctrl + F, cerca del final del archivo). NO borres id="tbLogo". -->
+        <span class="tb-logo" id="tbLogo" aria-label="Espacio para el logo"></span>
+        <span class="cmyk-dots"><i></i><i></i><i></i><i></i></span> GRAFIKWORLD · ART & MIND
+      </div>
+      <div class="score-chip" title="Puntos acumulados en esta sesión"><span class="star">★</span><span id="totalPoints">0</span><small>pts</small></div>
+    </div>
+
+    <!-- ===== PANTALLA PRINCIPAL (inicio): portada + menú de juegos ===== -->
+    <div id="homeView">
+      <!-- ✏️ SE PUEDE EDITAR: textos de la portada (título, descripción y etiquetas de áreas). Cambia solo el texto entre las etiquetas; no borres las etiquetas <span>, <h1> ni <p>. -->
+      <!-- PORTADA: título grande, descripción y etiquetas de las áreas -->
+      <header class="hero">
+        <h1>Juegos de<br /><span class="w-c">Diseño</span> <span class="w-m">Gráfico</span><br /><span class="w-y">para jugar y aprender</span></h1>
+        <p>Nueve juegos recreativos que cubren toda la carrera: entrena el ojo con el color, domina la tipografía, ordena la historia del diseño y pon a prueba lo que sabes de impresión, fotografía, branding y publicidad.</p>
+        <div class="areas" aria-label="Áreas de la carrera incluidas">
+          <span>Teoría del color</span><span>Tipografía</span><span>Logotipos e identidad</span>
+          <span>Composición y retícula</span><span>Branding</span><span>Historia del diseño</span>
+          <span>Herramientas y software</span><span>Fotografía e imagen</span>
+          <span>Impresión y acabados</span><span>Publicidad y banners</span>
+          <span>Ilustración</span><span>Diseño digital y redes</span>
+        </div>
+      </header>
+
+      <main>
+        <!-- ⛔ NO TOCAR: el contenedor id="cardGrid" debe quedar vacío; JavaScript lo llena con la lista GAMES. -->
+        <!-- MENÚ DE JUEGOS: las tarjetas se crean con JavaScript a partir de la lista GAMES -->
+        <h2 class="section-title">Elige un juego <small>— cada partida suma puntos a tu marcador</small></h2>
+        <div class="grid" id="cardGrid"></div>
+      </main>
+
+      <!-- ✏️ SE PUEDE EDITAR: texto del pie de página. -->
+      <!-- PIE DE PÁGINA -->
+      <footer>
+        Hecho para estudiantes y curiosos del diseño gráfico. Juega, equivócate y vuelve a intentar: así se entrena el ojo de diseñador.
+      </footer>
+    </div>
+
+    <!-- ✏️ SE PUEDE EDITAR: sección ÁLBUM DE PERSONAJES. Los círculos se crean con JavaScript (busca ALBUM_PROF y ALBUM más abajo). NO cambies id="game-album" ni id="albumRoot". -->
+    <main class="game" id="game-album">
+      <div class="game-head"><button class="back-btn" data-back>← Todos los juegos</button><h2>Álbum de personajes</h2></div>
+      <div class="album" id="albumRoot"></div>
+    </main>
+
+    <!-- ⚠️ EDITAR CON CUIDADO: puedes cambiar los textos visibles de este juego. NO cambies los id="..." ni data-... (el JavaScript los usa). -->
+    <!-- ============ JUEGO 2 · QUIZ MAESTRO ============ -->
+    <main class="game" id="game-quiz">
+      <div class="game-head"><button class="back-btn" data-back>← Todos los juegos</button><h2>Quiz Maestro del Diseño</h2></div>
+      <p class="game-sub">Todas las áreas · 10 preguntas al azar de un banco que cubre color, tipografía, logotipos, composición y retícula, branding, historia, software, fotografía, impresión y acabados, publicidad y banners, ilustración y diseño digital.</p>
+      <div class="panel">
+        <div class="hud">
+          <div class="stat"><span>Pregunta</span><b id="quizRound">–</b></div>
+          <div class="stat"><span>Aciertos</span><b id="quizHits">0</b></div>
+          <div class="stat"><span>Puntos</span><b id="quizScore">0</b></div>
+        </div>
+        <div id="quizStart">
+          <p class="explain">Cada respuesta correcta vale 10 puntos y trae una breve explicación para que aprendas jugando.</p>
+          <button class="btn" id="quizStartBtn">Empezar el quiz</button>
+        </div>
+        <div id="quizPlay" class="hidden">
+          <h3 id="quizQ" style="font-size:clamp(18px,4vw,23px);line-height:1.35;margin:4px 0 0"></h3>
+          <div class="options" id="quizOptions"></div>
+          <p class="feedback" id="quizFeedback"></p>
+          <p class="explain" id="quizExplain"></p>
+          <button class="btn hidden" id="quizNext">Siguiente →</button>
+        </div>
+        <div class="end-box hidden" id="quizEnd">
+          <div class="big-score" id="quizFinal">0</div>
+          <p id="quizFinalMsg"></p>
+          <div class="row"><button class="btn" id="quizAgain">Jugar otra vez</button><button class="btn ghost" data-back>Volver al menú</button></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ⚠️ EDITAR CON CUIDADO: puedes cambiar los textos visibles de este juego. NO cambies los id="..." ni data-... (el JavaScript los usa). -->
+    <!-- ============ JUEGO 6 · LÍNEA DE TIEMPO ============ -->
+    <main class="game" id="game-timeline">
+      <div class="game-head"><button class="back-btn" data-back>← Todos los juegos</button><h2>Línea de Tiempo</h2></div>
+      <p class="game-sub">Historia del diseño · Toca los hitos en orden cronológico, del más antiguo al más reciente: imprenta, fotografía, Bauhaus, logotipos famosos y la era digital.</p>
+      <div class="panel">
+        <div class="hud">
+          <div class="stat"><span>Colocados</span><b id="tlPlaced">0 / 6</b></div>
+          <div class="stat"><span>Puntos</span><b id="tlScore">0</b></div>
+        </div>
+        <div class="tl-slots" id="tlSlots"></div>
+        <div class="tl-pool" id="tlPool"></div>
+        <p class="feedback" id="tlFeedback"></p>
+        <p class="explain" id="tlExplain"></p>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn" id="tlRestart">Nueva partida</button>
+          <button class="btn ghost hidden" id="tlReveal">Ver el orden correcto</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ⚠️ EDITAR CON CUIDADO: puedes cambiar los textos visibles de este juego. NO cambies los id="..." ni data-... (el JavaScript los usa). -->
+    <!-- ============ JUEGO 8 · VERDADERO O FALSO ============ -->
+    <main class="game" id="game-vf">
+      <div class="game-head"><button class="back-btn" data-back>← Todos los juegos</button><h2>Verdadero o Falso Exprés</h2></div>
+      <p class="game-sub">Todo diseño gráfico · Tienes 45 segundos para juzgar afirmaciones de impresión, fotografía, software, publicidad, branding y redes. Cada acierto suma 5 puntos; cada error resta 2 y 2 segundos.</p>
+      <div class="panel">
+        <div class="hud">
+          <div class="stat"><span>Tiempo</span><b id="vfTime">45</b></div>
+          <div class="stat"><span>Aciertos</span><b id="vfHits">0</b></div>
+          <div class="stat"><span>Puntos</span><b id="vfScore">0</b></div>
+        </div>
+        <div id="vfStart">
+          <p class="explain">Sin pausa entre preguntas: lee, decide y toca. Ideal para repasar antes de un examen.</p>
+          <button class="btn" id="vfStartBtn">¡A jugar!</button>
+        </div>
+        <div id="vfPlay" class="hidden">
+          <div class="timerbar"><i id="vfBar"></i></div>
+          <div class="vf-statement" id="vfStatement"></div>
+          <div class="vf-btns">
+            <button class="btn-true" id="vfTrue">✓ Verdadero</button>
+            <button class="btn-false" id="vfFalse">✗ Falso</button>
+          </div>
+          <p class="feedback" id="vfFeedback"></p>
+        </div>
+        <div class="end-box hidden" id="vfEnd">
+          <div class="big-score" id="vfFinal">0</div>
+          <p id="vfFinalMsg"></p>
+          <div class="row"><button class="btn" id="vfAgain">Jugar otra vez</button><button class="btn ghost" data-back>Volver al menú</button></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ⚠️ EDITAR CON CUIDADO: puedes cambiar los textos visibles de este juego. NO cambies los id="..." ni data-... (el JavaScript los usa). -->
+    <!-- ============ JUEGO 9 · EL TÉRMINO PERDIDO ============ -->
+    <main class="game" id="game-hang">
+      <div class="game-head"><button class="back-btn" data-back>← Todos los juegos</button><h2>El Término Perdido</h2></div>
+      <p class="game-sub">Vocabulario de la carrera · Adivina letra a letra los términos que todo diseñador usa a diario: del kerning al pantone. Tienes 6 vidas por palabra y una pista para ayudarte.</p>
+      <div class="panel">
+        <div class="hud">
+          <div class="stat"><span>Vidas</span><b class="lives" id="hangLives">♥♥♥♥♥♥</b></div>
+          <div class="stat"><span>Palabras</span><b id="hangWords">0</b></div>
+          <div class="stat"><span>Puntos</span><b id="hangScore">0</b></div>
+        </div>
+        <p class="explain" id="hangHint" style="font-size:16px"></p>
+        <div class="hang-word" id="hangWord"></div>
+        <div class="keyboard" id="hangKeys"></div>
+        <p class="feedback" id="hangFeedback"></p>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn" id="hangNew">Nueva palabra</button>
+          <button class="btn ghost hidden" id="hangNext">Siguiente palabra →</button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      "use strict";
+      /* =====================================================
+         PROGRAMACIÓN PRINCIPAL (parte 1): funciones de ayuda,
+         marcador, menú y navegación entre pantallas
+         ===================================================== */
+      /* ⛔ NO TOCAR: funciones de ayuda ($, shuffle, rand, clamp). Las usan todos los juegos. */
+      /* ----- Utilidades: $ (buscar por id), shuffle (mezclar), rand (aleatorio), clamp (limitar) ----- */
+      const $ = (id) => document.getElementById(id);
+      const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+      const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+      /* ⛔ NO TOCAR: suma de puntos y récords. Todos los juegos dependen de esto. */
+      /* ----- MARCADOR GLOBAL: addPoints suma o resta puntos; setBest guarda el récord de cada juego ----- */
+      let totalPoints = 0;
+      const bests = {};
+      function addPoints(n) { totalPoints = Math.max(0, totalPoints + n); $("totalPoints").textContent = totalPoints; }
+      function setBest(gameId, score) {
+        if (!bests[gameId] || score > bests[gameId]) { bests[gameId] = score; const el = $("best-" + gameId); if (el) el.innerHTML = "Tu récord: <b>" + score + " pts</b>"; }
+      }
+
+      /* ✏️ SE PUEDE EDITAR dentro de cada juego: title (nombre), desc (descripción) y tagText (etiqueta).
+         ⛔ NO TOCAR: id (lo usa todo el programa) y tag ("c","m","y","k" = color de la etiqueta).
+         */
+      /* ----- MENÚ DE JUEGOS: GAMES es la lista de tarjetas. Para añadir, quitar o renombrar un juego, edita aquí ----- */
+      const GAMES = [
+        { id: "det", tag: "c", tagText: "Percepción visual", title: "Detective del Diseño", desc: "Encuentra el error en logotipos y carteles bien dibujados: contraste, proporciones, tracking, alineación… Con pistas y 3 niveles." },
+        { id: "logo", tag: "m", tagText: "Logotipos e identidad", title: "Diseñador por un Día", desc: "Diseña logotipos profesionales estilo corporativo: símbolo, contenedor, tipografía, paleta y composición de alto nivel visual." },
+        { id: "col", tag: "y", tagText: "Teoría del color", title: "Atrapa los Colores", desc: "Primarios, secundarios, terciarios, mezclas, complementarios y códigos HEX en tres dificultades. Con 3 niveles de dificultad." },
+        { id: "fab", tag: "k", tagText: "Tipografía", title: "La Fábrica de Tipografías", desc: "Reconoce letras y clasifícalas según su estilo: serif, sans serif, monoespaciada, script o display. Con 3 niveles de dificultad." },
+        { id: "ads", tag: "c", tagText: "Publicidad y banners", title: "Misión Publicitaria", desc: "Crea banners profesionales y comerciales atractivos: fondo, imagen, titular, tipografía, botón y formato. 3 niveles." },
+        { id: "quiz", tag: "m", tagText: "Todas las áreas", title: "Quiz Maestro del Diseño", desc: "Preguntas de todas las áreas: color, tipografía, logos, composición, branding, historia, software, fotografía, impresión y más." },
+        { id: "timeline", tag: "y", tagText: "Historia del diseño", title: "Línea de Tiempo", desc: "Ordena los grandes hitos: la imprenta, la Bauhaus, la Helvetica, el primer banner y más." },
+        { id: "vf", tag: "c", tagText: "Contrarreloj", title: "Verdadero o Falso Exprés", desc: "45 segundos para juzgar afirmaciones de toda la carrera. Rápido, como una entrega real." },
+        { id: "hang", tag: "m", tagText: "Vocabulario", title: "El Término Perdido", desc: "Adivina letra a letra el vocabulario del diseñador: pantone, mockup, briefing…" },
+        { id: "album", tag: "k", tagText: "Easter egg", title: "Álbum de personajes", desc: "Todos los personajes, cada uno en su lugar." }
+      ];
+/* ⛔ NO TOCAR: crea las tarjetas del menú a partir de GAMES. */
+            const grid = $("cardGrid");
+      GAMES.forEach(g => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = '<span class="tag ' + g.tag + '">' + g.tagText + '</span><h3>' + g.title + '</h3><p>' + g.desc + '</p>' +
+          '<div class="foot"><span class="best" id="best-' + g.id + '">Sin récord todavía</span><button class="btn" data-play="' + g.id + '">Jugar →</button></div>';
+        grid.appendChild(card);
+      });
+
+      /* ⛔ NO TOCAR: abrir un juego (showGame) y volver al menú (goHome). */
+      /* ----- NAVEGACIÓN: showGame abre un juego (y llama a Guido); goHome vuelve al menú ----- */
+      function showGame(id) {
+        $("homeView").classList.add("hidden");
+        document.querySelectorAll(".game").forEach(s => s.classList.remove("open"));
+        if (id) { if (id === "album") { renderAlbum(); guidoSeekStart(); } else guidoPark(id); $("game-" + id).classList.add("open"); if (INIT[id]) INIT[id](); if (id === "timeline") initTimeline(); if (id === "hang") initHangman(); }
+        window.scrollTo({ top: 0 });
+      }
+      function goHome() { guidoFree();
+        stopVF();
+        $("homeView").classList.remove("hidden");
+        document.querySelectorAll(".game").forEach(s => s.classList.remove("open"));
+        window.scrollTo({ top: 0 });
+      }
+      /* ✏️ EASTER EGG: la tarjeta del álbum está oculta hasta que se descubre (4 clics en los puntos de colores de la barra superior).
+         Una vez descubierta queda guardada en el navegador (localStorage "grafikEgg"). */
+      { const ab = document.querySelector('[data-play="album"]'); if (ab) { ab.textContent = "Ver álbum →"; const bs = $("best-album"); if (bs) bs.textContent = "¡Lo encontraste!";
+          let on = false; try { on = localStorage.getItem("grafikEgg") === "1"; } catch (e) {} const cd = ab.closest(".card"); if (cd && !on) cd.style.display = "none"; } }
+      document.querySelectorAll("[data-play]").forEach(b => b.addEventListener("click", () => showGame(b.dataset.play)));
+      document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", goHome));
+    </script>
+
+    <script>
+      "use strict";
+      /* ✏️ SE PUEDE EDITAR: QUIZ_BANK = banco de preguntas. Puedes agregar, borrar o cambiar preguntas.
+         Formato de cada una: { cat: "categoría", q: "pregunta", o: ["op0","op1","op2","op3"], a: número de la opción correcta (0 a 3), e: "explicación" }
+         Cada partida usa 10 preguntas al azar del banco (slice(0, 10) más abajo: cambia el 10 si quieres más o menos).
+         */
+      /* ================= JUEGO 2 · QUIZ MAESTRO ================= */
+      const QUIZ_BANK = [
+        { cat: "Teoría del color", q: "¿Qué significan las siglas CMYK, el modelo usado en imprenta?", o: ["Cian, Magenta, Amarillo y Negro", "Color, Matiz, Yellow y Key", "Cian, Morado, Amarillo y Koral", "Computadora, Monitor, Yellow y Negro"], a: 0, e: "CMYK = Cyan, Magenta, Yellow y Key (negro). Es el modelo sustractivo de la impresión en cuatricromía." },
+        { cat: "Teoría del color", q: "¿Cuál es el color complementario del rojo en el círculo cromático tradicional?", o: ["Azul", "Verde", "Violeta", "Naranja"], a: 1, e: "Los complementarios están opuestos en el círculo: el del rojo es el verde. Juntos se intensifican mutuamente." },
+        { cat: "Teoría del color", q: "Un color con blanco añadido (más claro) se llama…", o: ["Tono", "Sombra", "Tinte", "Saturación"], a: 2, e: "Tinte = color + blanco. Sombra = color + negro. Tono = color + gris." },
+        { cat: "Tipografía", q: "¿Qué es el «kerning»?", o: ["El espacio entre líneas", "El ajuste del espacio entre dos letras concretas", "El grosor del trazo", "El tamaño de la fuente"], a: 1, e: "El kerning ajusta pares de letras específicos (como «AV»); el tracking ajusta el espaciado de todo un texto." },
+        { cat: "Tipografía", q: "Las «serifas» son…", o: ["Letras sin remates", "Los pequeños remates al final de los trazos de una letra", "Letras en cursiva", "El espacio entre palabras"], a: 1, e: "Las tipografías serif (Times, Georgia) tienen remates; las sans serif (Helvetica, Arial) carecen de ellos." },
+        { cat: "Tipografía", q: "¿Qué es el «interlineado» (leading)?", o: ["La distancia entre la línea base de un renglón y el siguiente", "El margen izquierdo del texto", "El espacio entre palabras", "La altura de la letra x"], a: 0, e: "El interlineado es el espacio vertical entre líneas de texto; suele ser 120 % del tamaño de la fuente." },
+        { cat: "Logotipos e identidad", q: "Un «isotipo» es…", o: ["El nombre de la marca en letras", "El símbolo gráfico de la marca, sin texto", "El eslogan de la empresa", "La paleta de colores corporativa"], a: 1, e: "Isotipo = solo el símbolo (la manzana de Apple). Logotipo = solo el texto. Imagotipo = ambos separados; isologo = ambos fusionados." },
+        { cat: "Logotipos e identidad", q: "¿Por qué un logotipo profesional se entrega en formato vectorial?", o: ["Porque pesa menos en redes sociales", "Porque se puede escalar a cualquier tamaño sin perder calidad", "Porque solo así tiene color", "Porque lo exige la ley"], a: 1, e: "El vector se construye con trazados matemáticos: va de una tarjeta personal a una valla sin pixelarse." },
+        { cat: "Composición y retícula", q: "La «regla de los tercios» consiste en…", o: ["Usar solo tres colores", "Dividir la imagen en 9 partes y colocar los elementos clave en las intersecciones", "Dejar un tercio de la página en blanco", "Usar tres tipografías como máximo"], a: 1, e: "Al ubicar el sujeto en los puntos de intersección de la retícula de tercios, la composición gana equilibrio y dinamismo." },
+        { cat: "Composición y retícula", q: "En diseño editorial, la «retícula» (grid) sirve para…", o: ["Decorar las páginas", "Organizar el contenido con una estructura invisible de columnas y márgenes", "Recortar las fotografías", "Elegir la paleta de colores"], a: 1, e: "La retícula da orden, coherencia y ritmo visual a revistas, libros y sitios web." },
+        { cat: "Branding", q: "¿Qué es un «manual de identidad corporativa»?", o: ["El catálogo de productos de la empresa", "El documento con las normas de uso de la marca: logo, colores, tipografías y aplicaciones", "El contrato del diseñador", "La lista de precios de impresión"], a: 1, e: "El manual garantiza que la marca se aplique igual en una tarjeta, un empaque o una publicación de Instagram." },
+        { cat: "Branding", q: "El «branding» se refiere a…", o: ["Solo al diseño del logotipo", "La gestión completa de la marca: identidad, valores, tono y experiencia", "Imprimir en grandes cantidades", "Registrar la marca en el banco"], a: 1, e: "El logo es solo una parte: el branding construye todo lo que la gente piensa y siente sobre una marca." },
+        { cat: "Historia del diseño", q: "¿En qué ciudad y año se fundó la Bauhaus, la escuela que revolucionó el diseño moderno?", o: ["París, 1889", "Weimar (Alemania), 1919", "Nueva York, 1945", "Londres, 1901"], a: 1, e: "Walter Gropius fundó la Bauhaus en Weimar en 1919, uniendo arte, artesanía y tecnología." },
+        { cat: "Historia del diseño", q: "¿Quién inventó la imprenta de tipos móviles en Europa (hacia 1440)?", o: ["Leonardo da Vinci", "Johannes Gutenberg", "Paul Rand", "William Morris"], a: 1, e: "Gutenberg imprimió su famosa Biblia hacia 1455; su imprenta multiplicó los libros y, con ellos, el diseño editorial." },
+        { cat: "Historia del diseño", q: "La tipografía Helvetica fue diseñada en…", o: ["Italia, 1920", "Suiza, 1957", "Estados Unidos, 1980", "Japón, 1965"], a: 1, e: "Max Miedinger la creó en Suiza en 1957. «Helvetica» viene de Helvetia, nombre latino de Suiza." },
+        { cat: "Historia del diseño", q: "El famoso logotipo «I ♥ NY» (1977) fue creado por…", o: ["Milton Glaser", "Andy Warhol", "Saul Bass", "Paula Scher"], a: 0, e: "Milton Glaser lo bocetó en un taxi en 1977; se convirtió en uno de los símbolos gráficos más imitados del mundo." },
+        { cat: "Herramientas y software", q: "Adobe Illustrator trabaja principalmente con…", o: ["Imágenes de mapa de bits", "Gráficos vectoriales", "Video y animación", "Modelos 3D"], a: 1, e: "Illustrator = vectores (logos, ilustración). Photoshop = mapa de bits (foto). InDesign = maquetación editorial." },
+        { cat: "Herramientas y software", q: "¿Para qué sirve principalmente Adobe InDesign?", o: ["Editar fotografía", "Maquetar revistas, libros y documentos de varias páginas", "Crear sitios web", "Dibujar vectores"], a: 1, e: "InDesign es el estándar para diseño editorial: revistas, libros, catálogos y folletos." },
+        { cat: "Herramientas y software", q: "La herramienta «pluma» en los programas de diseño sirve para…", o: ["Pintar con acuarela digital", "Crear trazados vectoriales con puntos de ancla y curvas Bézier", "Borrar fondos", "Añadir texto curvo solamente"], a: 1, e: "Con la pluma se construyen formas vectoriales precisas: es la base del dibujo de logotipos e ilustraciones." },
+        { cat: "Fotografía e imagen", q: "En fotografía, el «ISO» controla…", o: ["La velocidad del obturador", "La sensibilidad del sensor a la luz", "La apertura del diafragma", "El enfoque automático"], a: 1, e: "ISO alto = más luz pero más ruido digital. ISO bajo = imagen más limpia, ideal con buena luz." },
+        { cat: "Fotografía e imagen", q: "Una imagen para imprenta de buena calidad debe tener una resolución de…", o: ["72 dpi", "96 dpi", "300 dpi", "1000 dpi"], a: 2, e: "300 dpi (puntos por pulgada) es el estándar de impresión; 72 dpi alcanza para pantalla." },
+        { cat: "Fotografía e imagen", q: "¿Qué formato de imagen admite fondo transparente?", o: ["JPG", "PNG", "BMP siempre", "Ninguno"], a: 1, e: "PNG admite transparencia (ideal para logos en la web). JPG no; por eso un logo con fondo «invisible» nunca es JPG." },
+        { cat: "Impresión y acabados", q: "El «sangrado» (bleed) en un archivo para imprenta es…", o: ["Un error de tinta", "El excedente de diseño (3–5 mm) que se extiende fuera del corte para evitar bordes blancos", "La primera prueba de color", "Un tipo de encuadernación"], a: 1, e: "Sin sangrado, un mínimo desplazamiento de la guillotina deja un filo blanco en el borde del impreso." },
+        { cat: "Impresión y acabados", q: "La «cuatricromía» es…", o: ["Imprimir con cuatro tipos de papel", "El proceso de impresión a todo color con las tintas C, M, Y y K", "Un acabado con brillo", "Cuatro pliegues en un folleto"], a: 1, e: "Casi todas las revistas y empaques a color se imprimen en cuatricromía CMYK." },
+        { cat: "Impresión y acabados", q: "Un «troquelado» es…", o: ["Un corte con forma especial hecho con una cuchilla (troquel)", "Una tinta metálica", "El pegado de un libro", "Una prueba de imprenta"], a: 0, e: "El troquel permite cortes y ventanas con formas: empaques, stickers, invitaciones con silueta." },
+        { cat: "Impresión y acabados", q: "El acabado «plastificado mate» (laminado mate) aporta…", o: ["Brillo intenso y colores más vivos", "Un tacto suave, elegante y sin reflejos", "Impermeabilidad total al agua", "Relieve en el papel"], a: 1, e: "El laminado mate protege el impreso y da un acabado sobrio; el brillo, en cambio, realza el color y refleja la luz." },
+        { cat: "Publicidad y banners", q: "Un «banner publicitario» es…", o: ["El logotipo de una campaña", "Una pieza gráfica publicitaria, impresa o digital, que comunica una oferta o mensaje y busca una acción del público", "Solo un cartel de papel en la calle", "El nombre de una red social"], a: 1, e: "El banner combina imagen, texto breve y llamado a la acción; en la web suele ser clicable y llevar a una página de destino." },
+        { cat: "Publicidad y banners", q: "En un banner, el «CTA» (call to action) es…", o: ["El precio del producto", "El llamado a la acción: «Compra ahora», «Inscríbete», «Haz clic aquí»", "El nombre del diseñador", "El código de colores"], a: 1, e: "Sin CTA claro, el público ve el banner pero no sabe qué hacer después. Es el botón (real o sugerido) de la pieza." },
+        { cat: "Publicidad y banners", q: "El primer banner publicitario de la web apareció en…", o: ["1985", "1994", "2005", "2012"], a: 1, e: "En 1994, AT&T pagó 30 000 $ por el primer banner en HotWired.com; tuvo un clic del 44 %, impensable hoy." },
+        { cat: "Publicidad y banners", q: "Para que un banner se lea de un vistazo, lo más importante es…", o: ["Poner todo el texto posible", "Jerarquía clara: un mensaje principal, poco texto y buen contraste", "Usar muchas tipografías", "Llenar todos los bordes de adornos"], a: 1, e: "El público decide en 1–3 segundos: un solo mensaje, titular grande, imagen clara y CTA visible." },
+        { cat: "Ilustración", q: "Una ilustración «vectorial» se caracteriza por…", o: ["Estar hecha con píxeles", "Poder ampliarse sin perder nitidez, al estar formada por trazados", "Solo poder hacerse a mano", "No admitir color"], a: 1, e: "La ilustración vectorial (Illustrator, Inkscape) escala de un sticker a una valla sin pixelarse." },
+        { cat: "Ilustración", q: "El «boceto» en un proyecto de ilustración es…", o: ["El archivo final para imprimir", "El dibujo preliminar que explora la idea y la composición antes del arte final", "La factura del ilustrador", "Un tipo de papel"], a: 1, e: "Bocetar primero ahorra horas: se prueban composición, poses y lectura visual antes de pulir." },
+        { cat: "Diseño digital y redes", q: "En diseño web, «responsive» significa que el diseño…", o: ["Responde con animaciones", "Se adapta a distintos tamaños de pantalla (celular, tablet, computadora)", "Se carga en menos de un segundo", "Tiene muchos botones"], a: 1, e: "La mayoría del público navega desde el celular: un diseño que no se adapta pierde visitas." },
+        { cat: "Diseño digital y redes", q: "¿Qué es el contraste en accesibilidad web?", o: ["Una moda de diseño oscuro", "La diferencia suficiente entre texto y fondo para que todas las personas puedan leerlo", "Usar colores opuestos siempre", "El brillo de la pantalla"], a: 1, e: "La norma WCAG pide al menos 4.5:1 de contraste para texto normal: diseño bonito, sí, pero legible para todos." },
+        { cat: "Diseño digital y redes", q: "Un «mockup» es…", o: ["El logotipo en blanco y negro", "Una representación realista de cómo se verá el diseño aplicado (una taza, una polera, una pantalla)", "Un tipo de letra", "El archivo editable del logo"], a: 1, e: "Los mockups ayudan al cliente a imaginarse el diseño en el mundo real antes de producirlo." },
+        { cat: "Composición y retícula", q: "El «espacio en blanco» (espacio negativo) en diseño…", o: ["Es espacio desperdiciado", "Es el área vacía alrededor de los elementos: da respiro, orden y elegancia", "Solo se usa en fondos blancos", "Debe evitarse siempre"], a: 1, e: "El espacio negativo es un elemento activo: guía la mirada y hace que el mensaje principal destaque." }
+      ];
+/* ⛔ NO TOCAR: lógica del Quiz (inicio, siguiente pregunta, puntaje). */
+            let quizState = null;
+      function startQuiz() {
+        quizState = { list: shuffle(QUIZ_BANK).slice(0, 10), idx: 0, hits: 0, score: 0 };
+        $("quizStart").classList.add("hidden"); $("quizEnd").classList.add("hidden"); $("quizPlay").classList.remove("hidden");
+        nextQuiz();
+      }
+      function nextQuiz() {
+        if (quizState.idx >= quizState.list.length) return endQuiz();
+        const item = quizState.list[quizState.idx];
+        quizState.idx++;
+        $("quizRound").textContent = quizState.idx + " / 10";
+        $("quizQ").textContent = item.q;
+        $("quizFeedback").textContent = ""; $("quizExplain").textContent = "";
+        $("quizNext").classList.add("hidden");
+        const order = shuffle(item.o.map((text, i) => ({ text, ok: i === item.a })));
+        const box = $("quizOptions"); box.innerHTML = "";
+        order.forEach(opt => {
+          const b = document.createElement("button");
+          b.className = "opt";
+          b.innerHTML = '<span class="cat">' + item.cat + '</span>' + opt.text;
+          b.addEventListener("click", () => answerQuiz(b, opt.ok, item));
+          box.appendChild(b);
+        });
+      }
+      function answerQuiz(btn, ok, item) {
+        document.querySelectorAll("#quizOptions .opt").forEach(b => { b.disabled = true; });
+        if (ok) {
+          btn.classList.add("right"); quizState.hits++; quizState.score += 10; addPoints(10);
+          $("quizFeedback").textContent = "¡Correcto! +10 pts"; $("quizFeedback").className = "feedback ok";
+        } else {
+          btn.classList.add("wrong");
+          document.querySelectorAll("#quizOptions .opt").forEach(b => { if (b.textContent.includes(item.o[item.a])) b.classList.add("right"); });
+          $("quizFeedback").textContent = "No exactamente…"; $("quizFeedback").className = "feedback bad";
+        }
+        $("quizHits").textContent = quizState.hits; $("quizScore").textContent = quizState.score;
+        $("quizExplain").textContent = item.e;
+        $("quizNext").textContent = quizState.idx >= 10 ? "Ver resultado →" : "Siguiente →";
+        $("quizNext").classList.remove("hidden");
+      }
+      function endQuiz() {
+        $("quizPlay").classList.add("hidden"); $("quizEnd").classList.remove("hidden");
+        $("quizFinal").textContent = quizState.score + " pts";
+        $("quizFinalMsg").textContent = quizState.hits >= 9 ? "Nivel director de arte: dominas la teoría de toda la carrera." :
+          quizState.hits >= 7 ? "Muy buen nivel de diseñador en formación. ¡Casi perfecto!" :
+          quizState.hits >= 5 ? "Base sólida. Repasa las explicaciones y vuelve por la revancha." :
+          "Todo diseñador empezó sin saber qué era un kerning. Lee las explicaciones y reintenta.";
+        setBest("quiz", quizState.score);
+      }
+      $("quizStartBtn").addEventListener("click", startQuiz);
+      $("quizAgain").addEventListener("click", startQuiz);
+      $("quizNext").addEventListener("click", nextQuiz);
+    </script>
+
+    <script>
+      "use strict";
+      /* ✏️ SE PUEDE EDITAR: TL_EVENTS = hitos históricos. Formato: { label: "nombre", year: año, detail: "dato extra" }.
+         Puedes agregar o cambiar eventos; cada partida usa 6 al azar (slice(0, 6) más abajo).
+         */
+      /* ================= JUEGO 6 · LÍNEA DE TIEMPO ================= */
+      const TL_EVENTS = [
+        { label: "Imprenta de tipos móviles de Gutenberg", year: 1440, detail: "1440 · Gutenberg (Alemania)" },
+        { label: "Primera fotografía permanente (Niépce)", year: 1826, detail: "1826 · «Vista desde la ventana en Le Gras»" },
+        { label: "Arts & Crafts de William Morris", year: 1861, detail: "1861 · Reacción artesanal contra la industria" },
+        { label: "Nace el cartel moderno de Toulouse-Lautrec", year: 1891, detail: "1891 · «La Goulue» y el Moulin Rouge" },
+        { label: "Fundación de la Bauhaus", year: 1919, detail: "1919 · Weimar, Alemania" },
+        { label: "Nace la tipografía Helvetica", year: 1957, detail: "1957 · Max Miedinger, Suiza" },
+        { label: "Logotipo «I ♥ NY» de Milton Glaser", year: 1977, detail: "1977 · Nueva York" },
+        { label: "Sale la primera Macintosh con gráficos", year: 1984, detail: "1984 · Apple revoluciona el estudio de diseño" },
+        { label: "Se lanza Adobe Photoshop 1.0", year: 1990, detail: "1990 · Nace la edición digital de imagen" },
+        { label: "Primer banner publicitario en la web", year: 1994, detail: "1994 · AT&T en HotWired.com" },
+        { label: "Se funda Instagram, red visual por excelencia", year: 2010, detail: "2010 · El diseño para redes despega" }
+      ];
+/* ⛔ NO TOCAR: lógica de la línea de tiempo. */
+            let tl = null;
+      function initTimeline() {
+        const picks = shuffle(TL_EVENTS).slice(0, 6).sort((a, b) => a.year - b.year);
+        tl = { answer: picks, placed: 0, score: 0, done: false };
+        $("tlPlaced").textContent = "0 / 6"; $("tlScore").textContent = "0";
+        $("tlFeedback").textContent = ""; $("tlExplain").textContent = "";
+        $("tlReveal").classList.add("hidden");
+        const slots = $("tlSlots"); slots.innerHTML = "";
+        picks.forEach((_, i) => {
+          const s = document.createElement("div");
+          s.className = "tl-slot"; s.id = "tl-slot-" + i;
+          s.innerHTML = '<span class="num">' + (i + 1) + '</span><span>Paso ' + (i + 1) + ' · el más antiguo primero</span>';
+          slots.appendChild(s);
+        });
+        const pool = $("tlPool"); pool.innerHTML = "";
+        shuffle(picks).forEach(ev => {
+          const b = document.createElement("button");
+          b.className = "tl-chip"; b.textContent = ev.label;
+          b.addEventListener("click", () => placeTl(b, ev));
+          pool.appendChild(b);
+        });
+      }
+      function placeTl(btn, ev) {
+        if (!tl || tl.done) return;
+        const expected = tl.answer[tl.placed];
+        const slot = $("tl-slot-" + tl.placed);
+        if (ev.year === expected.year) {
+          btn.classList.add("used");
+          slot.classList.add("filled", "good");
+          slot.innerHTML = '<span class="num">✓</span><span><b>' + ev.label + '</b><br /><small>' + ev.detail + '</small></span>';
+          tl.placed++; tl.score += 10; addPoints(10);
+          $("tlPlaced").textContent = tl.placed + " / 6"; $("tlScore").textContent = tl.score;
+          $("tlFeedback").textContent = "¡Correcto! " + ev.detail; $("tlFeedback").className = "feedback ok";
+          if (tl.placed === 6) {
+            tl.done = true; setBest("timeline", tl.score);
+            $("tlFeedback").textContent = "¡Línea de tiempo completa y perfecta! 60 pts";
+            $("tlExplain").textContent = "Recorriste la historia del diseño: de la imprenta de madera y metal a las redes sociales, cada hito cambió cómo se diseña.";
+          }
+        } else {
+          slot.classList.remove("badslot"); void slot.offsetWidth; slot.classList.add("badslot");
+          tl.score = Math.max(0, tl.score - 3);
+          $("tlScore").textContent = tl.score;
+          $("tlFeedback").textContent = "Ese hito va en otro lugar de la historia. Fíjate en las pistas: ¿antes o después de lo ya colocado?"; $("tlFeedback").className = "feedback bad";
+          $("tlReveal").classList.remove("hidden");
+        }
+      }
+      $("tlReveal").addEventListener("click", () => {
+        if (!tl) return;
+        $("tlExplain").textContent = "Orden correcto: " + tl.answer.map(e => e.label + " (" + e.year + ")").join("  →  ");
+      });
+      $("tlRestart").addEventListener("click", initTimeline);
+
+      /* ✏️ SE PUEDE EDITAR: VF_BANK = afirmaciones. Formato: { s: "afirmación", v: true o false }.
+         El tiempo de la partida está en time: 45 (segundos) dentro de startVF.
+         */
+      /* ================= JUEGO 8 · VERDADERO O FALSO EXPRÉS ================= */
+      const VF_BANK = [
+        { s: "Para imprimir se usa el modelo de color CMYK y para pantalla, el RGB.", v: true },
+        { s: "Un archivo JPG puede tener fondo transparente.", v: false },
+        { s: "El sangrado (bleed) habitual para imprenta es de 3 a 5 mm.", v: true },
+        { s: "La Bauhaus se fundó en Estados Unidos en 1950.", v: false },
+        { s: "«Kerning» y «tracking» significan exactamente lo mismo.", v: false },
+        { s: "Un banner publicitario debe incluir un llamado a la acción (CTA).", v: true },
+        { s: "300 dpi es la resolución recomendada para imprimir con calidad.", v: true },
+        { s: "Los archivos vectoriales se pixelan al ampliarlos mucho.", v: false },
+        { s: "El isotipo es la parte simbólica de una marca, sin texto.", v: true },
+        { s: "En fotografía, subir el ISO aumenta la sensibilidad a la luz pero también el ruido.", v: true },
+        { s: "Helvetica es una tipografía con serifas diseñada en Alemania.", v: false },
+        { s: "La regla de los tercios ayuda a componer fotografías y diseños más equilibrados.", v: true },
+        { s: "El primer banner de la historia de la web se publicó en 1994.", v: true },
+        { s: "Un mockup muestra el diseño aplicado en un objeto o pantalla realista.", v: true },
+        { s: "Para un logo es mejor entregarlo solo en JPG, porque es el formato más profesional.", v: false },
+        { s: "El color complementario del azul es el naranja.", v: true },
+        { s: "Adobe InDesign sirve principalmente para editar fotografías.", v: false },
+        { s: "Un diseño «responsive» se adapta al tamaño de pantalla del celular y la computadora.", v: true },
+        { s: "El espacio en blanco en una composición es espacio perdido que hay que rellenar.", v: false },
+        { s: "La cuatricromía imprime a todo color usando las tintas cian, magenta, amarilla y negra.", v: true },
+        { s: "En un cartel, lo ideal es usar cinco tipografías distintas para que se vea variado.", v: false },
+        { s: "Paul Rand diseñó logos famosos como los de IBM y ABC.", v: true },
+        { s: "El formato PNG admite transparencia, ideal para logos en la web.", v: true },
+        { s: "Un troquelado es un tipo de tinta especial con brillo metálico.", v: false }
+      ];
+/* ⛔ NO TOCAR: lógica de Verdadero o Falso (cronómetro y puntaje). */
+            let vf = null, vfTimer = null;
+      function startVF() {
+        stopVF();
+        vf = { list: shuffle(VF_BANK), idx: 0, hits: 0, score: 0, time: 45, alive: true };
+        $("vfStart").classList.add("hidden"); $("vfEnd").classList.add("hidden"); $("vfPlay").classList.remove("hidden");
+        $("vfFeedback").textContent = "";
+        nextVF();
+        vfTimer = setInterval(() => {
+          vf.time -= 0.1;
+          $("vfTime").textContent = Math.max(0, Math.ceil(vf.time));
+          $("vfBar").style.width = Math.max(0, vf.time / 45 * 100) + "%";
+          if (vf.time <= 0) endVF();
+        }, 100);
+      }
+      function stopVF() { if (vfTimer) clearInterval(vfTimer); vfTimer = null; if (vf) vf.alive = false; }
+      function nextVF() {
+        if (!vf || !vf.alive) return;
+        if (vf.idx >= vf.list.length) vf.list = shuffle(VF_BANK), vf.idx = 0;
+        vf.current = vf.list[vf.idx]; vf.idx++;
+        $("vfStatement").textContent = vf.current.s;
+      }
+      function answerVF(said) {
+        if (!vf || !vf.alive) return;
+        if (said === vf.current.v) {
+          vf.hits++; vf.score += 5; addPoints(5);
+          $("vfFeedback").textContent = "¡Bien! +5 pts"; $("vfFeedback").className = "feedback ok";
+        } else {
+          vf.score = Math.max(0, vf.score - 2); vf.time = Math.max(0, vf.time - 2);
+          $("vfFeedback").textContent = "¡Error! −2 pts y −2 s"; $("vfFeedback").className = "feedback bad";
+        }
+        $("vfHits").textContent = vf.hits; $("vfScore").textContent = vf.score;
+        nextVF();
+      }
+      function endVF() {
+        stopVF();
+        $("vfPlay").classList.add("hidden"); $("vfEnd").classList.remove("hidden");
+        $("vfFinal").textContent = vf.score + " pts";
+        $("vfFinalMsg").textContent = "Acertaste " + vf.hits + " afirmaciones en 45 segundos. " +
+          (vf.hits >= 14 ? "Reflejos de diseñador bajo presión de entrega." :
+           vf.hits >= 9 ? "Buen ritmo: la velocidad llega con la práctica." :
+           "Sin prisa pero sin pausa: primero domina los conceptos, la velocidad viene sola.");
+        setBest("vf", vf.score);
+      }
+      $("vfStartBtn").addEventListener("click", startVF);
+      $("vfAgain").addEventListener("click", startVF);
+      $("vfTrue").addEventListener("click", () => answerVF(true));
+      $("vfFalse").addEventListener("click", () => answerVF(false));
+
+      /* ✏️ SE PUEDE EDITAR: HANG_WORDS = palabras del ahorcado. Formato: { w: "PALABRA EN MAYÚSCULAS", hint: "pista" }. */
+      /* ================= JUEGO 9 · EL TÉRMINO PERDIDO ================= */
+      const HANG_WORDS = [
+        { w: "KERNING", hint: "Ajuste del espacio entre dos letras concretas." },
+        { w: "PANTONE", hint: "Sistema de colores directos con códigos, estándar en imprenta e identidad." },
+        { w: "VECTOR", hint: "Gráfico de trazados que no se pixela al escalar." },
+        { w: "ISOTIPO", hint: "El símbolo de una marca, sin el texto." },
+        { w: "LOGOTIPO", hint: "La marca representada solo con el nombre en letras." },
+        { w: "BRIEFING", hint: "El documento-resumen con lo que el cliente pide antes de diseñar." },
+        { w: "MOCKUP", hint: "Presentación realista del diseño aplicado a un objeto o pantalla." },
+        { w: "BANNER", hint: "Pieza publicitaria (impresa o digital) con mensaje y llamado a la acción." },
+        { w: "RETICULA", hint: "La estructura invisible de columnas y márgenes que ordena una página." },
+        { w: "PALETA", hint: "El conjunto de colores elegido para un proyecto." },
+        { w: "SERIFA", hint: "El remate decorativo al final de los trazos de algunas letras." },
+        { w: "PÍXEL", hint: "La unidad mínima de una imagen digital." },
+        { w: "SANGRADO", hint: "Excedente de 3–5 mm fuera del corte en archivos de imprenta." },
+        { w: "TROQUEL", hint: "La cuchilla con forma que corta empaques y stickers especiales." },
+        { w: "BRANDING", hint: "La gestión integral de una marca, más allá del logo." },
+        { w: "BAUHAUS", hint: "La escuela alemana de 1919 que unió arte, artesanía y tecnología." }
+      ];
+/* ⛔ NO TOCAR: letras del teclado del ahorcado (ya incluye Ñ y tildes). */
+            const LETTERS = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ".split("");
+      let hang = null;
+      function initHangman() {
+        const item = HANG_WORDS[rand(0, HANG_WORDS.length - 1)];
+        hang = { word: item.w.toUpperCase(), guessed: new Set(), lives: 6, over: false };
+        $("hangHint").innerHTML = "<b>Pista:</b> " + item.hint;
+        $("hangLives").textContent = "♥♥♥♥♥♥";
+        $("hangFeedback").textContent = "";
+        $("hangNext").classList.add("hidden");
+        renderHangWord(); renderHangKeys();
+      }
+      function renderHangWord() {
+        const box = $("hangWord"); box.innerHTML = "";
+        hang.word.split("").forEach(ch => {
+          const d = document.createElement("div");
+          if (ch === " ") { d.className = "cell space"; }
+          else { d.className = "cell"; d.textContent = hang.guessed.has(ch) ? ch : ""; }
+          box.appendChild(d);
+        });
+      }
+      function renderHangKeys() {
+        const kb = $("hangKeys"); kb.innerHTML = "";
+        LETTERS.forEach(L => {
+          const b = document.createElement("button");
+          b.className = "key"; b.textContent = L;
+          b.addEventListener("click", () => guessLetter(b, L));
+          kb.appendChild(b);
+        });
+      }
+      function guessLetter(btn, L) {
+        if (!hang || hang.over || hang.guessed.has(L)) return;
+        hang.guessed.add(L);
+        if (hang.word.includes(L)) {
+          btn.classList.add("hit"); btn.disabled = true;
+          $("hangFeedback").textContent = "¡La «" + L + "» sí está!"; $("hangFeedback").className = "feedback ok";
+        } else {
+          btn.classList.add("miss"); btn.disabled = true;
+          hang.lives--;
+          $("hangLives").textContent = "♥".repeat(Math.max(0, hang.lives)) + "♡".repeat(6 - Math.max(0, hang.lives));
+          $("hangFeedback").textContent = "La «" + L + "» no está. Te quedan " + hang.lives + " vidas."; $("hangFeedback").className = "feedback bad";
+        }
+        renderHangWord();
+        const won = hang.word.split("").every(ch => ch === " " || hang.guessed.has(ch));
+        if (won) {
+          hang.over = true;
+          const pts = 20 + hang.lives * 5;
+          addPoints(pts); setBest("hang", Math.max(bests.hang || 0, pts));
+          const prev = parseInt($("hangScore").textContent) || 0;
+          $("hangScore").textContent = prev + pts;
+          const wEl = $("hangWords"); wEl.textContent = (parseInt(wEl.textContent) || 0) + 1;
+          $("hangFeedback").textContent = "¡Palabra completa: " + hang.word + "! +" + pts + " pts"; $("hangFeedback").className = "feedback ok";
+          $("hangNext").classList.remove("hidden");
+          document.querySelectorAll("#hangKeys .key").forEach(k => k.disabled = true);
+        } else if (hang.lives <= 0) {
+          hang.over = true;
+          hang.guessed = new Set(hang.word.split(""));
+          renderHangWord();
+          $("hangFeedback").textContent = "Sin vidas… La palabra era " + hang.word + ". El vocabulario se aprende usándolo."; $("hangFeedback").className = "feedback bad";
+          $("hangNext").classList.remove("hidden");
+          document.querySelectorAll("#hangKeys .key").forEach(k => k.disabled = true);
+        }
+      }
+      $("hangNew").addEventListener("click", initHangman);
+      $("hangNext").addEventListener("click", initHangman);
+    </script>
+  <script>
+      "use strict";
+/* ⛔ NO TOCAR: base técnica de los juegos nuevos (INIT, mkGame, chips). Todos los juegos la usan. */
+            /* INIT guarda la función que arranca cada juego nuevo al abrirlo (INIT.col, INIT.det, etc.) */
+      const INIT = {};
+      const pick = a => a[rand(0, a.length - 1)];
+      /* mkGame: crea la pantalla (título, descripción y panel) de un juego nuevo */
+      function mkGame(id, title, sub, body) {
+        const m = document.createElement("main"); m.className = "game"; m.id = "game-" + id;
+        m.innerHTML = '<div class="game-head"><button class="back-btn">← Todos los juegos</button><h2>' + title + '</h2></div><p class="game-sub">' + sub + '</p><div class="panel">' + body + '</div>';
+        m.querySelector(".back-btn").onclick = goHome; document.body.appendChild(m);
+      }
+      /* chips: crea botones de elección única (formas, colores, tipografías, titulares) */
+      function chips(box, items, cb) {
+        box.innerHTML = "";
+        items.forEach(it => {
+          const b = document.createElement("button");
+          if (it.c) { b.className = "sw"; b.style.background = it.c; b.setAttribute("aria-label", it.c); } else if (it.h) { b.className = "ic-btn"; b.innerHTML = it.h; b.setAttribute("aria-label", it.l || ""); } else { b.className = "tl-chip"; b.textContent = it.l; }
+          b.onclick = () => { [...box.children].forEach(x => x.classList.remove("sel")); b.classList.add("sel"); cb(it.v); };
+          box.appendChild(b);
+        });
+      }
+
+      /* =====================================================
+         BASE COMÚN DE LOS JUEGOS NUEVOS
+         Niveles Fácil / Normal / Difícil, barra de avance, pantalla final
+         y motor de rondas (runRounds). Cada nivel da más puntos por acierto.
+         ===================================================== */
+/* ⚠️ EDITAR CON CUIDADO: LVN son los nombres de los niveles y PTS = [4, 6, 9] los puntos por acierto (Fácil, Normal, Difícil).
+         Puedes cambiar esos números para dar más o menos puntos. NO cambies la estructura de HD, hud, chooseLevel, showEnd ni runRounds (el motor de rondas).
+         */
+            const LVN = ["Fácil", "Normal", "Difícil"], PTS = [4, 6, 9]; /* puntos por acierto según el nivel */
+      /* HD: estructura común de cada juego (marcadores, barra de avance y zona de juego) */
+      const HD = id => '<div class="hud"><div class="stat"><span>Nivel</span><b id="' + id + '-lv">—</b></div><div class="stat"><span>Avance</span><b id="' + id + '-r">0</b></div><div class="stat"><span>Puntos</span><b id="' + id + '-h">0</b></div></div><div class="prog"><i id="' + id + '-bar"></i></div><div id="' + id + '-stage"></div><div class="options two" id="' + id + '-opts"></div><p class="feedback" id="' + id + '-f"></p>';
+      function hud(id, lv, r, pts, pct) { $(id + "-lv").textContent = LVN[lv]; $(id + "-r").textContent = r; $(id + "-h").textContent = pts; $(id + "-bar").style.width = pct + "%"; }
+      /* chooseLevel: muestra las 3 dificultades con su descripción */
+      function chooseLevel(id, descs, cb) {
+        $(id + "-lv").textContent = "—"; $(id + "-r").textContent = "0"; $(id + "-h").textContent = "0"; $(id + "-bar").style.width = "0%";
+        $(id + "-opts").innerHTML = ""; $(id + "-f").textContent = "";
+        $(id + "-stage").innerHTML = '<p class="explain">Elige la dificultad:</p><div class="lv-grid">' + LVN.map((n, i) => '<button class="lv ' + "enh"[i] + '" data-l="' + i + '"><b>' + n + '</b><span>' + descs[i] + ' · ' + PTS[i] + ' pts por acierto</span></button>').join("") + '</div>';
+        $(id + "-stage").querySelectorAll(".lv").forEach(b => b.onclick = () => cb(+b.dataset.l));
+      }
+      /* showEnd: pantalla final con puntaje */
+      function showEnd(id, sc, txt, again, max) {
+        const r = max ? sc / max : 0, st = r >= .9 ? 3 : r >= .6 ? 2 : r >= .3 ? 1 : 0, msg = ["Sigue practicando", "¡Buen comienzo!", "¡Muy bien!", "¡Excelente, nivel pro!"][st];
+        $(id + "-opts").innerHTML = ""; $(id + "-f").textContent = ""; $(id + "-bar").style.width = "100%";
+        $(id + "-stage").innerHTML = '<div class="end-box"><div class="stars">' + "★".repeat(st) + "☆".repeat(3 - st) + '</div><div class="big-score">' + sc + ' pts</div><h3>' + msg + '</h3><p>' + txt + '</p><div class="row"><button class="btn" id="' + id + '-again">Jugar otra vez</button><button class="btn ghost" id="' + id + '-menu">Volver al menú</button></div></div>';
+        setBest(id, sc); $(id + "-again").onclick = again; $(id + "-menu").onclick = goHome;
+      }
+      /* runRounds: MOTOR de los juegos por rondas. gen(nivel) devuelve {prompt, why, opts:[{html, ok}]} */
+      function runRounds(id, gen, lv, again) {
+        const N = 10, P = PTS[lv], o = $(id + "-opts"), f = $(id + "-f"); let r = 0, h = 0, pts = 0;
+        const next = () => {
+          if (r >= N) return showEnd(id, pts, "Acertaste " + h + " de " + N + " en nivel " + LVN[lv] + ".", again, N * P);
+          const q = gen(lv); r++; hud(id, lv, r + "/" + N, pts, (r - 1) / N * 100);
+          $(id + "-stage").innerHTML = q.prompt; f.textContent = ""; f.className = "feedback"; o.innerHTML = "";
+          q.opts.forEach(x => {
+            const b = document.createElement("button"); b.className = "opt"; b.innerHTML = x.html; x.el = b;
+            b.onclick = () => {
+              [...o.children].forEach(c => c.disabled = true);
+              if (x.ok) { h++; pts += P; addPoints(P); b.classList.add("right"); f.className = "feedback ok"; f.textContent = "¡Bien! +" + P + " · " + q.why; }
+              else { b.classList.add("wrong"); q.opts.find(y => y.ok).el.classList.add("right"); f.className = "feedback bad"; f.textContent = "Casi. " + q.why; }
+              hud(id, lv, r + "/" + N, pts, r / N * 100); setTimeout(next, 1700);
+            };
+            o.appendChild(b);
+          });
+        };
+        next();
+      }
+      const RG = (id, gen, descs) => () => chooseLevel(id, descs, lv => runRounds(id, gen, lv, INIT[id]));
+
+      /* =====================================================
+         JUEGO · ATRAPA LOS COLORES
+         Fácil: primarios/secundarios/terciarios y cálidos/fríos
+         Normal: mezclas, complementarios y análogos
+         Difícil: códigos HEX, color inverso RGB y mezcla de luz
+         ===================================================== */
+      const W = { Rojo: "#e23b2e", Amarillo: "#f5c400", Azul: "#1f4fd8", Naranja: "#f07d18", Verde: "#1d9e5f", Violeta: "#7a3fb0" };
+/* ✏️ SE PUEDE EDITAR: datos del juego Atrapa los Colores (colores primarios, secundarios, complementarios, mezclas...).
+         Puedes ajustar nombres y códigos de color con cuidado de mantener el mismo formato de listas.
+         */
+            const PR = ["Rojo", "Amarillo", "Azul"], SE = ["Naranja", "Verde", "Violeta"], WARM = ["Rojo", "Naranja", "Amarillo"];
+      const ORD = ["Rojo", "Naranja", "Amarillo", "Verde", "Azul", "Violeta"]; /* círculo cromático en orden */
+      const CMP = { Rojo: "Verde", Verde: "Rojo", Azul: "Naranja", Naranja: "Azul", Amarillo: "Violeta", Violeta: "Amarillo" };
+      const MX = [["Rojo", "Amarillo", "Naranja"], ["Amarillo", "Azul", "Verde"], ["Rojo", "Azul", "Violeta"]];
+      const TY = [["Rojo", "#e23b2e", "Primario"], ["Amarillo", "#f5c400", "Primario"], ["Azul", "#1f4fd8", "Primario"], ["Naranja", "#f07d18", "Secundario"], ["Verde", "#1d9e5f", "Secundario"], ["Violeta", "#7a3fb0", "Secundario"], ["Rojo anaranjado", "#ee5a24", "Terciario"], ["Amarillo anaranjado", "#f9a825", "Terciario"], ["Amarillo verdoso", "#a4c639", "Terciario"], ["Azul verdoso", "#0fa3a3", "Terciario"], ["Azul violáceo", "#4b4fcf", "Terciario"], ["Rojo violáceo", "#b5388f", "Terciario"]];
+      const TYW = { Primario: "no se obtiene mezclando otros colores.", Secundario: "nace de mezclar dos primarios.", Terciario: "mezcla un primario con un secundario vecino." };
+      const AD = [["Rojo + Verde", "Amarillo"], ["Rojo + Azul", "Magenta"], ["Verde + Azul", "Cian"], ["Rojo + Verde + Azul", "Blanco"]];
+      const sw = n => '<span style="display:block;height:62px;border-radius:8px;border:2px solid var(--line);background:' + W[n] + '"></span>';
+      const HEXf = a => "#" + a.map(n => n.toString(16).padStart(2, "0")).join("").toUpperCase();
+      const big = c => '<div class="hex-swatch" style="background:' + c + ';height:120px"></div>';
+      /* hexQ: pregunta con 4 códigos HEX; "c" son los canales [r,g,b] de la respuesta correcta */
+/* ⛔ NO TOCAR: generador de preguntas HEX y del juego de colores (genCol). */
+            function hexQ(c, prompt, why) {
+        const a = HEXf(c), set = [a];
+        while (set.length < 4) { const d = c.slice(), k = rand(0, 2); d[k] = clamp(d[k] + rand(25, 60) * (Math.random() < .5 ? -1 : 1), 0, 255); const h = HEXf(d); if (!set.includes(h)) set.push(h); }
+        return { prompt: prompt, why: why, opts: shuffle(set).map(h => ({ html: '<span class="mono">' + h + '</span>', ok: h === a })) };
+      }
+      function genCol(lv) {
+        const t = rand(0, 2), all = Object.keys(W);
+        if (lv === 0) {
+          if (t < 2) { const c = pick(TY); return { prompt: big(c[1]) + '<p class="explain">¿Qué tipo de color es este?</p>', why: c[0] + " es " + c[2].toLowerCase() + ": " + TYW[c[2]], opts: ["Primario", "Secundario", "Terciario"].map(x => ({ html: x, ok: x === c[2] })) }; }
+          const c = pick(all), warm = WARM.includes(c);
+          return { prompt: big(W[c]) + '<p class="explain">¿Este color es cálido o frío?</p>', why: c + (warm ? " es cálido: recuerda al fuego y al sol." : " es frío: recuerda al agua y al hielo."), opts: ["Cálido", "Frío"].map(x => ({ html: x, ok: (x === "Cálido") === warm })) };
+        }
+        if (lv === 1) {
+          let a, pool, q, why;
+          if (t === 0) { const c = pick(all); a = CMP[c]; pool = all.filter(x => x !== a && x !== c); q = "el <b>complementario</b> de " + c; why = a + " está frente a " + c + " en el círculo cromático."; }
+          else if (t === 1) { const m = pick(MX); a = m[2]; pool = all.filter(x => x !== a && x !== m[0] && x !== m[1]); q = "la mezcla de <b>" + m[0] + " + " + m[1] + "</b>"; why = m[0] + " + " + m[1] + " = " + a + "."; }
+          else { const c = pick(ORD), i = ORD.indexOf(c), nb = [ORD[(i + 5) % 6], ORD[(i + 1) % 6]]; a = pick(nb); pool = ORD.filter(x => x !== c && !nb.includes(x)); q = "un color <b>análogo</b> de " + c; why = a + " es vecino de " + c + " en el círculo: los análogos están uno al lado del otro."; }
+          return { prompt: '<p class="explain" style="font-size:18px">Atrapa ' + q + '</p>', why: why, opts: shuffle([a].concat(shuffle(pool).slice(0, 3))).map(n => ({ html: sw(n), ok: n === a })) };
+        }
+        const c = [rand(30, 225), rand(30, 225), rand(30, 225)];
+        if (t === 0) return hexQ(c, big(HEXf(c)) + '<p class="explain">¿Cuál es el código HEX de este color?</p>', "El código correcto es " + HEXf(c) + ".");
+        if (t === 1) { const inv = c.map(v => 255 - v); return hexQ(inv, big(HEXf(c)) + '<p class="explain">Este color es <span class="mono">' + HEXf(c) + '</span>. ¿Cuál es su color inverso (255 − cada canal)?</p>', "Al invertir cada canal de " + HEXf(c) + " se obtiene " + HEXf(inv) + "."); }
+        const ad = pick(AD);
+        return { prompt: '<p class="explain" style="font-size:18px">En <b>luz (RGB)</b>, ¿qué resulta de <b>' + ad[0] + '</b>?</p>', why: "En síntesis aditiva " + ad[0] + " da " + ad[1].toLowerCase() + ".", opts: shuffle(AD.map(x => x[1])).map(n => ({ html: n, ok: n === ad[1] })) };
+      }
+      mkGame("col", "Atrapa los Colores", "Teoría del color en tres niveles: de los primarios a los códigos HEX.", HD("col"));
+      INIT.col = RG("col", genCol, ["Primarios, secundarios, terciarios y cálidos/fríos", "Mezclas, complementarios y análogos", "Códigos HEX, color inverso y mezcla de luz"]);
+
+      /* =====================================================
+         JUEGO · LA FÁBRICA DE TIPOGRAFÍAS
+         Fácil: 3 estilos · Normal: 5 estilos y «¿cuál letra es…?» · Difícil: vocabulario tipográfico
+         ===================================================== */
+/* ⚠️ EDITAR CON CUIDADO: datos de La Fábrica de Tipografías. SMP (letras de muestra) y TERMS (vocabulario) se pueden ampliar con el mismo formato.
+         NO cambies los códigos "f-serif", "f-sans"... porque coinciden con clases del CSS.
+         */
+            const FS = [["f-serif", "Serif", "Tiene serifas: remates en los extremos de los trazos."], ["f-sans", "Sans serif", "No tiene serifas: trazos limpios y uniformes."], ["f-mono", "Monoespaciada", "Cada letra ocupa el mismo ancho, como una máquina de escribir."], ["f-script", "Script", "Imita la escritura a mano con trazos conectados."], ["f-display", "Display", "Pensada para titulares: pesada y con mucha personalidad."]];
+      const FS3 = [FS[0], FS[1], FS[3]];
+      const SMP = ["Ag", "Rq", "Bea", "Gato", "Fábrica", "Kw", "Marca", "Sol", "Ñu", "Zeta", "Diseño", "Color", "Logo", "Trazo", "Pixel", "Brisa"];
+      /* TERMS: vocabulario tipográfico (término, definición) para el nivel difícil */
+      const TERMS = [["Kerning", "el ajuste del espacio entre dos letras concretas"], ["Tracking", "el espaciado uniforme de todo un grupo de letras"], ["Interlineado", "la distancia vertical entre líneas de texto"], ["Serifa", "el pequeño remate al final de los trazos de una letra"], ["Ascendente", "la parte de una letra que sube por encima de la altura de la x"], ["Descendente", "la parte de una letra que baja de la línea base, como en la g o la p"], ["Versalitas", "mayúsculas diseñadas con la altura de las minúsculas"], ["Ligadura", "dos o más letras unidas en un solo signo, como fi"], ["Peso", "el grosor de los trazos: light, regular, bold…"], ["Palo seco", "otro nombre de las tipografías sans serif"], ["Cuerpo", "el tamaño de la letra, medido en puntos"], ["Línea base", "la línea imaginaria sobre la que se apoyan las letras"]];
+      function genFab(lv) {
+        if (lv === 2) { const t = pick(TERMS); return { prompt: '<p class="explain" style="font-size:18px">¿Qué significa <b>' + t[0] + '</b>?</p>', why: t[0] + " es " + t[1] + ".", opts: shuffle([t].concat(shuffle(TERMS.filter(x => x !== t)).slice(0, 3))).map(x => ({ html: x[1], ok: x === t })) }; }
+        if (lv === 1 && Math.random() < .45) {
+          const f = pick(FS), w = pick(["Ag", "Rq", "Bea", "Gato"]);
+          return { prompt: '<p class="explain" style="font-size:18px">Atrapa la letra de estilo <b>' + f[1] + '</b></p>', why: f[2], opts: shuffle([f].concat(shuffle(FS.filter(x => x !== f)).slice(0, 3))).map(x => ({ html: '<span class="type-sample ' + x[0] + '" style="font-size:34px">' + w + '</span>', ok: x === f })) };
+        }
+        const set = lv === 0 ? FS3 : FS, f = pick(set);
+        const o = lv === 0 ? shuffle(set) : shuffle([f].concat(shuffle(FS.filter(x => x !== f)).slice(0, 3)));
+        return { prompt: '<div class="type-stage"><div class="type-sample ' + f[0] + '">' + pick(SMP) + '</div></div><p class="explain">¿A qué estilo pertenece esta letra?</p>', why: f[2], opts: o.map(x => ({ html: x[1], ok: x === f })) };
+      }
+      mkGame("fab", "La Fábrica de Tipografías", "Reconoce estilos tipográficos y domina el vocabulario del oficio.", HD("fab"));
+      INIT.fab = RG("fab", genFab, ["3 estilos: serif, sans serif y script", "5 estilos y retos de «¿cuál letra es…?»", "Vocabulario: kerning, tracking, interlineado…"]);
+
+      /* =====================================================
+         BIBLIOTECA DE ICONOS Y MOTOR DE LOGOS
+         IC: símbolos (trazo uniforme, cuadrícula 24). lgParts/lgSVG dibujan un logotipo completo
+         (contenedor + símbolo + nombre + frase). Lo usan el Detective, el Diseñador y la Misión.
+         ===================================================== */
+/* ⛔ NO TOCAR: biblioteca de iconos (IC) y motor que dibuja los logotipos (contSVG, lgParts). Lo usan Detective, Diseñador y Misión.
+         Solo toca IC si quieres añadir un icono nuevo de 24x24 con el mismo formato.
+         */
+            const SA = "Arial,sans-serif", SR = "Georgia,serif", SC = "'Brush Script MT','Segoe Script',cursive";
+      const IC = {
+        coffee: ["Taza", '<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v2M12 3v2"/>'],
+        leaf: ["Hoja", '<path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19c3-5 6-8 10-10"/>'],
+        mountain: ["Montaña", '<path d="M2 19 9 7l4 7 3-4 6 9z"/>'],
+        star: ["Estrella", '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'],
+        bolt: ["Rayo", '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'],
+        heart: ["Corazón", '<path d="M12 20S4 15 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15 12 20 12 20z"/>'],
+        sun: ["Sol", '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'],
+        wave: ["Ola", '<path d="M2 9c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/><path d="M2 16c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/>'],
+        paw: ["Huella", '<circle cx="8" cy="8" r="2"/><circle cx="16" cy="8" r="2"/><circle cx="5" cy="13" r="2"/><circle cx="19" cy="13" r="2"/><path d="M12 12c-3 0-6 4-6 6.5A2.5 2.5 0 0 0 9 21c1.2 0 2-.6 3-.6s1.8.6 3 .6a2.5 2.5 0 0 0 3-2.5C18 16 15 12 12 12z"/>'],
+        camera: ["Cámara", '<path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/>'],
+        book: ["Libro", '<path d="M3 5h7a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3z"/><path d="M21 5h-7a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h7z"/>'],
+        flame: ["Llama", '<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>'],
+        rocket: ["Cohete", '<path d="M12 3c4 2 6 6 5 11l-3 3h-4l-3-3C6 9 8 5 12 3z"/><circle cx="12" cy="10" r="1.5"/><path d="M8 17l-3 3M16 17l3 3"/>'],
+        music: ["Música", '<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>'],
+        pencil: ["Lápiz", '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>']
+      };
+/* ✏️ SE PUEDE EDITAR: PAL (colores), BGS (fondos), FNT (tipografías) y SHAPES (contenedores) que el jugador puede elegir al diseñar un logo.
+         Puedes cambiar nombres y colores #hex; mantén el formato [nombre, valor].
+         */
+            const PAL = [["Rojo", "#e23b2e"], ["Naranja", "#f07d18"], ["Amarillo", "#f5c400"], ["Verde", "#1d9e5f"], ["Cian", "#0090d4"], ["Azul", "#1f4fd8"], ["Violeta", "#7a3fb0"], ["Magenta", "#e5007d"], ["Café", "#7a4a21"], ["Negro", "#16130e"]];
+      const BGS = [["Blanco", "#ffffff"], ["Crema", "#f4efe2"], ["Oscuro", "#16130e"], ["Azul noche", "#10204a"]];
+      const FNT = { serif: ["Serif", SR], sans: ["Sans", SA], display: ["Display", "'Archivo Black',sans-serif"], script: ["Script", SC], mono: ["Mono", "'IBM Plex Mono',monospace"], elegant: ["Elegante", "'Palatino Linotype',Palatino,serif"] };
+      const SHAPES = [["none", "Sin contenedor"], ["circle", "Círculo"], ["rounded", "Cuadrado redondeado"], ["hex", "Hexágono"], ["shield", "Escudo"]];
+      const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+      const lum = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0); };
+      const cr = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+      const shade = (h, k) => { const n = parseInt(h.slice(1), 16), m = v => Math.round(v * (1 - k)).toString(16).padStart(2, "0"); return "#" + m(n >> 16 & 255) + m(n >> 8 & 255) + m(n & 255); };
+      /* contSVG: dibuja el contenedor del logo (círculo, cuadrado redondeado, hexágono o escudo) */
+      function contSVG(t, x, y, r, a) {
+        if (t === "circle") return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" ' + a + '/>';
+        if (t === "rounded") return '<rect x="' + (x - r) + '" y="' + (y - r) + '" width="' + 2 * r + '" height="' + 2 * r + '" rx="' + r * .3 + '" ' + a + '/>';
+        if (t === "hex") { const p = [0, 1, 2, 3, 4, 5].map(i => { const g = (60 * i - 90) * Math.PI / 180; return (x + r * Math.cos(g)).toFixed(1) + "," + (y + r * Math.sin(g)).toFixed(1); }).join(" "); return '<polygon points="' + p + '" stroke-linejoin="round" ' + a + '/>'; }
+        if (t === "shield") return '<path d="M' + x + ',' + (y - r) + ' L' + (x + r * .9) + ',' + (y - r * .55) + ' L' + (x + r * .9) + ',' + (y + r * .1) + ' Q' + (x + r * .9) + ',' + (y + r * .75) + ' ' + x + ',' + (y + r) + ' Q' + (x - r * .9) + ',' + (y + r * .75) + ' ' + (x - r * .9) + ',' + (y + r * .1) + ' L' + (x - r * .9) + ',' + (y - r * .55) + ' Z" stroke-linejoin="round" ' + a + '/>';
+        return "";
+      }
+      /* lgParts: devuelve las 4 partes del logo (c contenedor, i icono, t nombre, g frase) con su caja de clic.
+         Las opciones extra (isx, isy, idx, isc, ls, tcol, tsz, tf, ndx, cw) sirven para fabricar defectos en el Detective. */
+      function lgParts(o) {
+        const f = FNT[o.fo || "sans"][1], fill = o.st !== "line", col = o.col, bg = o.bg || "#ffffff", ly = o.ly || "v", v = ly === "v", only = ly === "i", has = o.ct && o.ct !== "none";
+        const ink = lum(col) > .45 ? "#16130e" : "#ffffff", cx = only ? 150 : v ? 150 : 72, cy = only ? 95 : v ? 64 : 95, r = only ? 66 : v ? 42 : 44;
+        const ics = has && fill ? ink : col, s = (has ? r * 1.15 : r * 1.7) / 24 * (o.isc || 1), sx = s * (o.isx || 1), sy = s * (o.isy || 1), ix = cx + (o.idx || 0);
+        const a = fill ? 'fill="' + col + '"' : 'fill="none" stroke="' + col + '" stroke-width="' + (o.cw || 5) + '"', P = {};
+        P.c = { s: has ? contSVG(o.ct, cx, cy, r, a) : "", b: [cx - r, cy - r, 2 * r, 2 * r] };
+        P.i = { s: '<g transform="translate(' + (ix - 12 * sx) + ' ' + (cy - 12 * sy) + ') scale(' + sx + ' ' + sy + ')" fill="none" stroke="' + ics + '" stroke-width="' + (o.isw || 2) + '" stroke-linecap="round" stroke-linejoin="round">' + IC[o.ic][1] + '</g>', b: [ix - 12 * sx, cy - 12 * sy, 24 * sx, 24 * sy] };
+        const nm = o.name || "", tg = o.tag || "", nsz = Math.max(14, Math.min(v ? 28 : 30, (v ? 250 : 150) / Math.max(1, nm.length * .62))), ls = o.ls || 0, nx = (v ? 150 : 125) + (o.ndx || 0), ny = v ? 142 : 92, anc = v ? "middle" : "start", nw = nm.length * (nsz * .62 + ls);
+        P.t = only ? { s: "", b: [0, 0, 0, 0] } : { s: '<text x="' + nx + '" y="' + ny + '" text-anchor="' + anc + '" font-size="' + nsz + '" font-weight="700" fill="' + (o.tcol || col) + '" font-family="' + f + '" letter-spacing="' + ls + '">' + esc(nm) + '</text>', b: [v ? nx - nw / 2 : nx, ny - nsz, nw, nsz * 1.3] };
+        const tsz = o.tsz || 11, tw = Math.max(40, tg.length * tsz * .58), tx = v ? 150 : 125, ty = v ? 164 : 114;
+        P.g = (only || !tg) ? { s: "", b: [0, 0, 0, 0] } : { s: '<text x="' + tx + '" y="' + ty + '" text-anchor="' + anc + '" font-size="' + tsz + '" fill="' + (lum(bg) < .2 ? "#cfcac0" : "#57534a") + '" font-family="' + (o.tf || f) + '">' + esc(tg) + '</text>', b: [v ? tx - tw / 2 : tx, ty - 12, tw, 18] };
+        return P;
+      }
+      const lgSVG = o => { const P = lgParts(o); return '<rect width="300" height="190" fill="' + (o.bg || "#ffffff") + '"/>' + P.c.s + P.i.s + P.t.s + P.g.s; };
+
+      /* =====================================================
+         JUEGO · DETECTIVE DEL DISEÑO
+         Los logotipos se dibujan con el mismo motor profesional del Diseñador (lgParts) y se les
+         inyecta UN defecto real. Los carteles añaden errores de composición. Nivel fácil: defectos
+         evidentes; difícil: detalles finos. Hay botón de pista. e=1 marca dónde está el error.
+         ===================================================== */
+/* ✏️ SE PUEDE EDITAR: BN = nombres de marca y TG = frases (eslóganes) que aparecen en los logos del Detective. Puedes agregar más. */
+            const BN = ["Brasa", "Orbita", "Nova", "Luma", "Terra", "Pixel", "Zenit", "Aura", "Cima", "Lino"];
+      const TG = ["diseño con alma", "hecho a mano", "ideas que brillan", "calidad de siempre", "creatividad en acción"];
+/* ⛔ NO TOCAR: funciones que dibujan las piezas del Detective (G, TX) y FLAWS (defectos). Es el motor de los errores escondidos. */
+            const G = (x, y, w, h, s, e) => '<g class="hs" data-e="' + e + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="transparent"/>' + s + '</g>';
+      const TX = (cx, y, t, sz, fill, ff, e) => { const w = t.length * sz * .62; return G(cx - w / 2, y - sz, w, sz * 1.3, '<text x="' + cx + '" y="' + y + '" font-size="' + sz + '" fill="' + fill + '" text-anchor="middle" font-family="' + ff + '" font-weight="700">' + t + '</text>', e); };
+      /* FLAWS: cada defecto = [parte con error, cambios al logo, explicación] */
+      const FLAWS = {
+        contrast: ["t", () => ({ tcol: pick(["#f0e6a8", "#dfe7d4", "#efd9d9"]) }), "Contraste insuficiente: el nombre en un tono tan pálido sobre blanco casi no se lee."],
+        stretch: ["i", () => ({ isx: 1.9, isy: .75 }), "El icono está deformado (estirado): escálalo siempre en proporción."],
+        cut: ["t", () => ({ ndx: 115 }), "El nombre se corta con el borde: respeta los márgenes de seguridad."],
+        offcenter: ["i", () => ({ idx: 16 }), "El icono no está centrado dentro de su contenedor."],
+        font: ["g", () => ({ tf: SC, tsz: 17 }), "La frase usa otra tipografía que choca con el nombre: limita las fuentes de un logo."],
+        overflow: ["i", () => ({ isc: 1.9 }), "El icono se sale del contenedor: déjale aire alrededor."],
+        tracking: ["t", () => ({ ls: 12 }), "Tracking exagerado: las letras del nombre están demasiado separadas."],
+        stroke: ["c", () => ({ st: "line", cw: 18 }), "Grosor desproporcionado: el contenedor pesa mucho más que el icono."],
+        tiny: ["g", () => ({ tsz: 5 }), "La frase es diminuta: nadie podría leerla en un uso real."]
+      };
+      function dLogo(flaw) {
+        const F = FLAWS[flaw], o = Object.assign({ ic: pick(Object.keys(IC)), col: pick(["#e23b2e", "#0090d4", "#1d9e5f", "#7a4a21", "#1f4fd8", "#e5007d"]), bg: "#ffffff", fo: pick(["serif", "sans", "display", "elegant"]), name: pick(BN), tag: pick(TG), ct: pick(["circle", "rounded", "hex", "shield"]), ly: "v", st: "fill" }, F[1]()), P = lgParts(o);
+        return { t: "Logotipo de «" + o.name + "»", why: F[2], s: '<rect width="300" height="190" fill="#fff"/>' + ["c", "i", "t", "g"].filter(k => P[k].s).map(k => G(P[k].b[0], P[k].b[1], P[k].b[2], P[k].b[3], P[k].s, k === F[0] ? 1 : 0)).join("") };
+      }
+      const DC = [
+        { lv: 0, mk: () => dLogo("contrast") }, { lv: 0, mk: () => dLogo("stretch") }, { lv: 0, mk: () => dLogo("cut") },
+        { lv: 0, mk: () => { const k = pick([["#0e4dd4", "#2a5ee0"], ["#e23b2e", "#ef5b50"], ["#1d9e5f", "#34b676"]]); return { t: "Banner de una tienda", why: "Texto sobre un fondo casi igual: sin contraste no hay lectura.", s: '<rect width="300" height="190" fill="' + k[0] + '"/>' + TX(150, 70, "GRAN VENTA", 28, "#fff", SA, 0) + TX(150, 125, "-" + pick(["30", "40", "50", "70"]) + "% hoy", 30, k[1], SA, 1) }; } },
+        { lv: 0, mk: () => { const w = pick([["DISEÑO", "DICEÑO"], ["CONCIERTO", "CONSIERTO"], ["PROMOCIÓN", "PROMOSIÓN"], ["FESTIVAL", "FESTIBAL"]]); return { t: "Cartel de un evento", why: "Falta de ortografía: «" + w[1] + "» debe escribirse «" + w[0] + "». Una errata arruina el cartel.", s: TX(150, 55, "GRAN", 24, "#16130e", SA, 0) + TX(150, 105, w[1], 32, "#e5007d", SA, 1) + TX(150, 155, "12 · 13 · 14 NOV", 18, "#16130e", SA, 0) }; } },
+        { lv: 1, mk: () => dLogo("offcenter") }, { lv: 1, mk: () => dLogo("font") }, { lv: 1, mk: () => dLogo("overflow") },
+        { lv: 1, mk: () => ({ t: "Póster de cine", why: "Desalineado: una línea está corrida y no comparte el eje con las demás.", s: TX(150, 55, "PELÍCULA", 28, "#16130e", SA, 0) + TX(95, 110, pick(["Estreno hoy", "Solo en cines"]), 22, "#e5007d", SA, 1) + TX(150, 155, "20:30 H", 20, "#16130e", SA, 0) }) },
+        { lv: 1, mk: () => ({ t: "Cartel de ofertas", why: "Los textos se pegan y se superponen: dales aire.", s: TX(150, 75, "GRAN VENTA", 32, "#16130e", SA, 0) + TX(150, 93, "-50% HOY", 28, "#e5007d", SA, 1) + TX(150, 160, "Solo esta semana", 16, "#16130e", SA, 0) }) },
+        { lv: 2, mk: () => dLogo("tracking") }, { lv: 2, mk: () => dLogo("stroke") }, { lv: 2, mk: () => dLogo("tiny") },
+        { lv: 2, mk: () => ({ t: "Afiche navideño", why: "Rojo sobre verde vibra y es ilegible, sobre todo para personas daltónicas.", s: '<rect width="300" height="190" fill="#1d9e5f"/>' + TX(150, 70, "NAVIDAD", 30, "#fff", SA, 0) + TX(150, 125, "Ofertas", 30, "#e23b2e", SA, 1) }) },
+        { lv: 2, mk: () => ({ t: "Folleto de un curso", why: "Interlineado demasiado cerrado: las líneas casi se tocan.", s: TX(150, 45, "Aprende", 26, "#16130e", SA, 0) + G(40, 72, 220, 50, '<g font-size="15" text-anchor="middle" fill="#16130e" font-family="' + SA + '"><text x="150" y="94">Diseña, crea y publica</text><text x="150" y="104">tus propios proyectos</text><text x="150" y="114">con ayuda experta</text></g>', 1) + TX(150, 165, "Inscríbete", 18, "#e5007d", SA, 0) }) }
+      ];
+      mkGame("det", "Detective del Diseño", "Logotipos y carteles con un error escondido. Tócalo; si te atascas, usa la pista.", HD("det"));
+      INIT.det = () => chooseLevel("det", ["Errores evidentes: contraste, proporciones, ortografía", "Alineación, coherencia, iconos y superposición", "Detalles finos: tracking, grosores, interlineado, color"], lv => {
+        const cs = shuffle(DC.filter(c => c.lv === lv || (c.lv < lv && Math.random() < .4))).slice(0, 5).map(c => c.mk()), P = PTS[lv] * 2; let i = 0, h = 0, pts = 0, done = false, hinted = false;
+        const sh = () => {
+          if (i >= cs.length) return showEnd("det", pts, "Encontraste " + h + " de " + cs.length + " errores en nivel " + LVN[lv] + ".", INIT.det, cs.length * P);
+          const c = cs[i]; done = false; hinted = false; hud("det", lv, (i + 1) + "/" + cs.length, pts, i / cs.length * 100);
+          $("det-stage").innerHTML = '<p class="explain"><b>' + c.t + '</b> · Toca el error</p><svg viewBox="0 0 300 190" style="width:100%;max-width:540px;display:block;border:2px solid var(--line);border-radius:14px;background:#fff">' + c.s + '</svg><div class="row" style="margin-top:10px"><button class="btn ghost" id="det-hint">💡 Pista (−2 pts)</button></div>';
+          $("det-f").textContent = ""; $("det-f").className = "feedback";
+          $("det-hint").onclick = () => { if (done || hinted) return; hinted = true; pts = Math.max(0, pts - 2); addPoints(-2); hud("det", lv, (i + 1) + "/" + cs.length, pts, i / cs.length * 100); const e = $("det-stage").querySelector('[data-e="1"]'); e.classList.add("hint"); setTimeout(() => e.classList.remove("hint"), 1800); };
+          $("det-stage").querySelectorAll(".hs").forEach(g => g.onclick = () => {
+            if (done) return; done = true; const ok = g.dataset.e === "1";
+            if (ok) { h++; pts += P; addPoints(P); }
+            $("det-stage").querySelector('[data-e="1"]').classList.add("show"); hud("det", lv, (i + 1) + "/" + cs.length, pts, (i + 1) / cs.length * 100);
+            $("det-f").className = "feedback " + (ok ? "ok" : "bad"); $("det-f").textContent = (ok ? "¡Lo encontraste! +" + P + " · " : "Ese estaba bien. ") + c.why;
+            setTimeout(() => { i++; sh(); }, 2800);
+          });
+        };
+        sh();
+      });
+
+      /* =====================================================
+         JUEGO · DISEÑADOR POR UN DÍA (estudio de logotipos con estilo corporativo / Coca-Cola refinado)
+         El cliente pide un logo (LC). Eliges símbolo, color, fondo, tipografía, composición,
+         contenedor, estilo y textos. Se puntúa con criterios de diseño reales (cada uno 10 pts).
+         Fácil: símbolo, color, contraste · Normal: + tipografía y composición · Difícil: + contenedor y frase.
+         Al final puedes descargar tu logo en SVG.
+         ===================================================== */
+/* ⚠️ EDITAR CON CUIDADO: WARMH (tonos cálidos) y LC = lista de encargos de logos de "Diseñador por un Día".
+         Puedes agregar encargos con el mismo formato: lv (nivel 0-2), b (marca), t (título), r (requisito), ic (iconos válidos), co (colores válidos).
+         */
+            const WARMH = ["#e23b2e", "#f07d18", "#f5c400", "#7a4a21"];
+      const LC = [
+        { lv: 0, b: "ColaRefresh", t: "Bebida «ColaRefresh»", r: "un símbolo enérgico como llama o rayo y colores corporativos rojos o intensos", ic: ["flame", "bolt"], co: ["#e23b2e", "#f07d18"] },
+        { lv: 0, b: "Huella", t: "Veterinaria «Huella»", r: "un símbolo de mascotas o cariño y colores verdes o azules", ic: ["paw", "heart"], co: ["#1d9e5f", "#0090d4", "#1f4fd8"] },
+        { lv: 0, b: "Pico", t: "Club de montaña «Pico»", r: "un símbolo de naturaleza y colores verde, azul o negro", ic: ["mountain", "sun", "leaf"], co: ["#1d9e5f", "#1f4fd8", "#16130e"] },
+        { lv: 0, b: "Lente", t: "Estudio fotográfico «Lente»", r: "un símbolo de cámara o estrella y color negro, magenta o cian", ic: ["camera", "star"], co: ["#16130e", "#e5007d", "#0090d4"] },
+        { lv: 1, b: "Tinta", t: "Librería «Tinta»", r: "símbolo de lectura o escritura, tipografía con serifa y composición vertical u horizontal", ic: ["book", "pencil"], co: ["#7a4a21", "#1f4fd8", "#16130e", "#7a3fb0"], fo: ["serif", "elegant"], ly: ["v", "h"] },
+        { lv: 1, b: "Onda", t: "App de música «Onda»", r: "símbolo musical o de ola, tipografía sans o display y composición horizontal o solo icono", ic: ["music", "wave"], co: ["#7a3fb0", "#e5007d", "#0090d4", "#1f4fd8"], fo: ["sans", "display"], ly: ["h", "i"] },
+        { lv: 1, b: "Hoja", t: "Tienda ecológica «Hoja»", r: "símbolo natural, colores verde o café, tipografía sans o script y composición vertical", ic: ["leaf", "sun"], co: ["#1d9e5f", "#7a4a21"], fo: ["sans", "script"], ly: ["v"] },
+        { lv: 1, b: "Rayo", t: "Gimnasio «Rayo»", r: "símbolo de energía, rojo, naranja o negro, tipografía display y composición horizontal", ic: ["bolt", "flame"], co: ["#e23b2e", "#f07d18", "#16130e"], fo: ["display"], ly: ["h"] },
+        { lv: 2, b: "Calma", t: "Spa «Calma»", r: "símbolo natural, verde o cian, tipografía script o elegante, composición vertical, contenedor circular y una frase corta", ic: ["leaf", "wave", "sun"], co: ["#1d9e5f", "#0090d4"], fo: ["script", "elegant", "serif"], ly: ["v"], ct: ["circle"] },
+        { lv: 2, b: "Cohete", t: "Startup «Cohete»", r: "símbolo tecnológico, azul, violeta o magenta, sans o display, composición horizontal, contenedor redondeado o hexágono y una frase corta", ic: ["rocket", "bolt"], co: ["#1f4fd8", "#e5007d", "#7a3fb0"], fo: ["sans", "display"], ly: ["h"], ct: ["rounded", "hex"] },
+        { lv: 2, b: "Alba", t: "Joyería «Alba»", r: "símbolo delicado, negro, magenta o violeta, tipografía serif, script o elegante, composición vertical, círculo o escudo y una frase corta", ic: ["star", "heart"], co: ["#16130e", "#e5007d", "#7a3fb0"], fo: ["serif", "script", "elegant"], ly: ["v"], ct: ["circle", "shield"] },
+        { lv: 2, b: "Brújula", t: "Escuela «Brújula»", r: "símbolo de estudio, azul o cian, sans o serif, composición libre, escudo o cuadrado redondeado y una frase corta", ic: ["book", "pencil", "star"], co: ["#1f4fd8", "#0090d4"], fo: ["sans", "serif"], ly: ["h", "v"], ct: ["shield", "rounded"] }
+      ];
+      /* grp: bloque de controles del estudio (se oculta si el nivel no lo necesita) */
+      const grp = (lv, min, id, label, inner) => '<div class="grp"' + (lv >= min ? "" : ' style="display:none"') + '><div class="ctl-t">' + label + '</div>' + (inner || '<div class="ctl" id="' + id + '"></div>') + '</div>';
+      const swItems = arr => arr.map(x => ({ c: x[1], v: x[1], l: x[0] }));
+      const icItems = () => Object.keys(IC).map(k => ({ v: k, l: IC[k][0], h: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + IC[k][1] + '</svg><span>' + IC[k][0] + '</span>' }));
+      mkGame("logo", "Diseñador por un Día", "Estudio de logotipos profesionales: símbolo, contenedor, tipografía, paleta y composición corporativa.", HD("logo"));
+      INIT.logo = () => chooseLevel("logo", ["Símbolo, color y contraste", "Además tipografía y composición", "Además contenedor, estilo y frase"], lv => {
+        const list = shuffle(LC.filter(c => c.lv === lv)), keys = [["ic", "co", "cn"], ["ic", "co", "cn", "fo", "ly"], ["ic", "co", "cn", "fo", "ly", "ct", "tg"]][lv], need = [["ic", "col"], ["ic", "col", "fo", "ly"], ["ic", "col", "fo", "ly", "ct"]][lv];
+        let ci = -1, S = {}, pk = {}, scored = false, tot = 0;
+        $("logo-stage").innerHTML = '<div class="studio"><div class="pv"><p class="explain" id="lg-t"></p><div id="lg-prev"></div><div class="row" style="margin-top:8px"><button class="btn ghost" id="lg-dl">⬇ Descargar SVG</button></div></div><div class="ctls">' +
+          grp(lv, 0, "lg-ic", "Símbolo") + grp(lv, 0, "lg-col", "Color principal") + grp(lv, 0, "lg-bg", "Fondo") + grp(lv, 1, "lg-fo", "Tipografía") + grp(lv, 1, "lg-ly", "Composición") + grp(lv, 2, "lg-ct", "Contenedor") + grp(lv, 2, "lg-st", "Estilo") +
+          grp(lv, 1, "", "Texto", '<label class="fld">Nombre<input id="lg-name" maxlength="14" autocomplete="off"></label>' + (lv >= 2 ? '<label class="fld">Frase corta<input id="lg-tag" maxlength="28" autocomplete="off" placeholder="Opcional pero recomendada"></label>': "")) +
+          '<div class="row actions"><button class="btn" id="lg-ok">Entregar diseño</button><button class="btn ghost" id="lg-nx">Siguiente cliente →</button></div></div></div>';
+        const cur = () => ({ ic: S.ic, col: S.col, bg: S.bg, fo: S.fo, ly: S.ly, ct: S.ct, st: S.st, name: S.name, tag: S.tag });
+        const draw = () => { $("lg-prev").innerHTML = '<svg viewBox="0 0 300 190" style="width:100%;max-width:340px;display:block;border:2px solid var(--line);border-radius:14px">' + lgSVG(cur()) + '</svg>'; };
+        const pick1 = (k, key) => v => { S[key] = v; pk[key] = true; draw(); };
+        const nw = () => {
+          ci++; if (ci >= list.length) return showEnd("logo", tot, "Atendiste a " + list.length + " clientes en nivel " + LVN[lv] + ".", INIT.logo, list.length * keys.length * 10);
+          const ch = list[ci]; S = { ic: "star", col: "#e23b2e", bg: "#ffffff", fo: "sans", ly: "v", ct: "circle", st: "fill", name: ch.b, tag: "" }; pk = {}; scored = false; $("logo-f").textContent = "";
+          hud("logo", lv, (ci + 1) + "/" + list.length, tot, ci / list.length * 100);
+          $("lg-t").innerHTML = "<b>" + ch.t + "</b><br>Pide: " + ch.r + ".";
+          chips($("lg-ic"), icItems(), pick1("ic", "ic")); chips($("lg-col"), swItems(PAL), pick1("col", "col")); chips($("lg-bg"), swItems(BGS), v => { S.bg = v; draw(); });
+          chips($("lg-fo"), Object.keys(FNT).map(k => ({ v: k, l: FNT[k][0], h: '<b style="font-family:' + FNT[k][1] + ';font-size:20px">Aa</b><span>' + FNT[k][0] + '</span>' })), pick1("fo", "fo"));
+          chips($("lg-ly"), [{ v: "v", l: "Vertical" }, { v: "h", l: "Horizontal" }, { v: "i", l: "Solo icono" }], pick1("ly", "ly"));
+          chips($("lg-ct"), SHAPES.map(x => ({ v: x[0], l: x[1] })), pick1("ct", "ct")); chips($("lg-st"), [{ v: "fill", l: "Relleno" }, { v: "line", l: "Contorno" }], v => { S.st = v; draw(); });
+          if ($("lg-name")) { $("lg-name").value = ch.b; $("lg-name").oninput = e => { S.name = e.target.value; draw(); }; }
+          if ($("lg-tag")) { $("lg-tag").value = ""; $("lg-tag").oninput = e => { S.tag = e.target.value; draw(); }; }
+          draw();
+        };
+        $("lg-nx").onclick = nw;
+        $("lg-dl").onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 190">' + lgSVG(cur()) + '</svg>'], { type: "image/svg+xml" })); a.download = (S.name || "logo") + ".svg"; a.click(); };
+        $("lg-ok").onclick = () => {
+          const f = $("logo-f"), ch = list[ci];
+          if (need.some(k => !pk[k])) { f.className = "feedback bad"; f.textContent = "Elige símbolo y color" + (lv >= 1 ? ", tipografía y composición" : "") + (lv >= 2 ? " y contenedor" : "") + " antes de entregar."; return; }
+          const k = cr(S.col, S.bg), tg = (S.tag || "").trim().length, ok = { ic: ch.ic.includes(S.ic), co: ch.co.includes(S.col), cn: k >= 3, fo: (ch.fo || []).includes(S.fo), ly: (ch.ly || []).includes(S.ly), ct: (ch.ct || []).includes(S.ct), tg: tg >= 3 && tg <= 28 };
+          const L = { ic: "Símbolo", co: "Paleta", cn: "Contraste " + k.toFixed(1) + ":1", fo: "Tipografía", ly: "Composición", ct: "Contenedor", tg: "Frase" };
+          const T = { ic: "el símbolo no cuenta el sector del cliente", co: "la paleta no encaja con la marca", cn: "el logo casi se pierde en el fondo (busca 3:1 o más)", fo: "la tipografía no refleja la personalidad de la marca", ly: "otra composición se ajusta mejor", ct: "el contenedor no encaja con la marca", tg: "escribe una frase de 3 a 28 letras" };
+          const sc = keys.filter(x => ok[x]).length * 10, bad = keys.filter(x => !ok[x]);
+          f.className = "feedback " + (sc >= keys.length * 6 ? "ok" : "bad"); f.textContent = keys.map(x => L[x] + (ok[x] ? " ✓" : " ✗")).join(" · ") + " → " + sc + " pts" + (bad.length ? " · Consejo: " + T[bad[0]] + "." : " · ¡Logo de nivel corporativo profesional!");
+          if (!scored) { scored = true; tot += sc; addPoints(sc); hud("logo", lv, (ci + 1) + "/" + list.length, tot, (ci + 1) / list.length * 100); }
+        };
+        nw();
+      });
+
+      /* =====================================================
+         JUEGO · MISIÓN PUBLICITARIA (estudio de banners comerciales)
+         ===================================================== */
+/* ✏️ SE PUEDE EDITAR: FMT (formatos) y AM = encargos de banners de "Misión Publicitaria". Puedes agregar encargos copiando el formato de los existentes. */
+            const FMT = [["sq", "Cuadrado 1:1"], ["wide", "Horizontal 16:9"], ["tall", "Vertical 9:16"]];
+      const AM = [
+        { lv: 0, p: "Zapatillas Ráfaga", h: ["Corre más lejos", "Zapatillas deportivas a la venta en nuestra tienda del centro comercial", "Calzado"], c: ["Compra ahora", "Quiénes somos"], f: "sq", ic: ["bolt", "rocket"] },
+        { lv: 0, p: "Helados Polo", h: ["Refréscate hoy", "Helados de muchos sabores, según temporada y disponibilidad", "Postres"], c: ["Pide el tuyo", "Términos y condiciones"], f: "sq", ic: ["sun", "heart"] },
+        { lv: 0, p: "Curso de Diseño", h: ["Diseña tu futuro", "Cursos de diseño gráfico con clases y materiales para estudiantes", "Educación"], c: ["Inscríbete hoy", "Más datos"], f: "sq", ic: ["pencil", "book", "star"] },
+        { lv: 0, p: "Pizzería Fuego", h: ["Calientita en 20 min", "Pizzas artesanales preparadas con ingredientes seleccionados de la región", "Comida"], c: ["Pide ya", "Ver menú y políticas"], f: "sq", ic: ["flame", "star"] },
+        { lv: 1, p: "Cafetería Brasa", h: ["Despierta tu mañana", "Café de especialidad tostado artesanalmente en nuestro local", "Café"], c: ["Ven a probarlo", "Leer más"], f: "sq", ic: ["coffee", "flame"] },
+        { lv: 1, p: "App Cima", h: ["Ahorra sin pensarlo", "Aplicación de finanzas personales con reportes mensuales detallados", "Finanzas"], c: ["Descárgala gratis", "Información"], f: "sq", ic: ["mountain", "rocket", "bolt"] },
+        { lv: 1, p: "Estudio Pixi", h: ["Juega, crea, aprende", "Estudio de actividades creativas para niños y niñas de todas las edades", "Niños"], c: ["Reserva tu cupo", "Contacto"], f: "sq", ic: ["pencil", "star", "heart"] },
+        { lv: 1, p: "Festival Luna", h: ["Una noche, mil luces", "Festival de música y artes con más de cuarenta presentaciones", "Evento"], c: ["Compra tu boleta", "Más detalles"], f: "sq", ic: ["music", "star", "sun"] },
+        { lv: 2, p: "Joyería Alba", med: "Stories de Instagram (vertical)", h: ["Brilla a tu ritmo", "Colección de joyas de plata con diseños exclusivos de temporada", "Joyas"], c: ["Descubre la colección", "Ver"], f: "tall", ic: ["star", "heart"], fo: ["serif", "elegant", "script"] },
+        { lv: 2, p: "Videojuego Byte", med: "Portada de YouTube (horizontal)", h: ["Tu próxima partida", "Videojuego de aventuras con modo cooperativo y más de cien niveles", "Juegos"], c: ["Juega gratis", "Detalles"], f: "wide", ic: ["bolt", "rocket", "star"], fo: ["display", "mono", "sans"] },
+        { lv: 2, p: "Spa Calma", med: "Publicación de Instagram (cuadrada)", h: ["Respira. Estás aquí", "Tratamientos de relajación y bienestar con cita previa obligatoria", "Spa"], c: ["Reserva hoy", "Información"], f: "sq", ic: ["leaf", "wave", "sun"], fo: ["script", "elegant", "serif"] },
+        { lv: 2, p: "Concierto Nova", med: "Stories de Instagram (vertical)", h: ["Una noche, un escenario", "Gran concierto de música en vivo con artistas invitados de varios países", "Música"], c: ["Compra tu entrada", "Más"], f: "tall", ic: ["music", "star", "wave"], fo: ["display", "sans"] }
+      ];
+      mkGame("ads", "Misión Publicitaria", "Estudio de banners profesionales: cuida el contraste, la imagen, el titular, el botón y el formato comercial.", HD("ads"));
+      INIT.ads = () => chooseLevel("ads", ["Contraste y titular", "Además botón de acción e imagen", "Además tipografía y formato según dónde se publica"], lv => {
+        const list = shuffle(AM.filter(m => m.lv === lv)), keys = [["co", "h"], ["co", "h", "c", "ic"], ["co", "h", "c", "ic", "fo", "f"]][lv], need = [["bg", "tc", "h"], ["bg", "tc", "h", "c", "ic"], ["bg", "tc", "h", "c", "ic", "fo", "f"]][lv];
+        let mi = -1, S = {}, pk = {}, scored = false, tot = 0;
+        $("ads-stage").innerHTML = '<div class="studio"><div class="pv"><p class="explain" id="ad-t"></p><div id="ad-prev"></div></div><div class="ctls">' +
+          grp(lv, 0, "ad-bg", "Fondo") + grp(lv, 1, "ad-bs", "Estilo de fondo") + grp(lv, 0, "ad-tc", "Color del texto") + grp(lv, 1, "ad-ic", "Imagen") + grp(lv, 0, "ad-h", "Titular") + grp(lv, 2, "ad-fo", "Tipografía del titular") + grp(lv, 1, "ad-c", "Botón") + grp(lv, 1, "ad-al", "Alineación") + grp(lv, 2, "ad-f", "Formato") +
+          '<div class="row actions"><button class="btn" id="ad-ok">Publicar banner</button><button class="btn ghost" id="ad-nx">Siguiente misión →</button></div></div></div>';
+        const draw = () => {
+          const m = list[mi], bg = S.bg || "#d9d7cf", tc = S.tc || "#16130e", fm = S.f || "sq", ar = { sq: "1/1", wide: "16/9", tall: "9/16" }[fm], w = { sq: "300px", wide: "100%", tall: "200px" }[fm], left = S.al === "left";
+          const back = S.bs === "grad" ? "linear-gradient(135deg," + bg + "," + shade(bg, .45) + ")" : S.bs === "diag" ? "repeating-linear-gradient(45deg," + bg + " 0 16px," + shade(bg, .18) + " 16px 32px)" : bg;
+          const img = S.ic ? '<svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="' + tc + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + IC[S.ic][1] + '</svg>' : "";
+          $("ad-prev").innerHTML = '<div style="width:' + w + ';max-width:100%;aspect-ratio:' + ar + ';background:' + back + ';color:' + tc + ';border:2px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:' + (left ? "flex-start" : "center") + ';justify-content:center;text-align:' + (left ? "left" : "center") + ';padding:16px;gap:10px"><div class="mono" style="font-size:12px;letter-spacing:.08em">' + m.p.toUpperCase() + '</div>' + img + '<div style="font-family:' + FNT[S.fo || "display"][1] + ';font-size:22px;line-height:1.12;font-weight:700">' + (S.h == null ? "Elige un titular" : m.h[S.h]) + '</div><span style="display:inline-block;background:' + tc + ';color:' + bg + ';padding:9px 16px;border-radius:8px;font-weight:700">' + (S.c == null ? "Elige un botón" : m.c[S.c]) + '</span></div>';
+        };
+        const set = (k, v) => { S[k] = v; pk[k] = true; draw(); };
+        const nw = () => {
+          mi++; if (mi >= list.length) return showEnd("ads", tot, "Publicaste " + list.length + " banners en nivel " + LVN[lv] + ".", INIT.ads, list.length * keys.length * 10);
+          const m = list[mi]; S = { bs: "solid", al: "center", c: lv < 1 ? 0 : null, f: lv < 2 ? "sq" : null }; pk = { c: lv < 1, f: lv < 2 }; scored = false; $("ads-f").textContent = "";
+          hud("ads", lv, (mi + 1) + "/" + list.length, tot, mi / list.length * 100);
+          $("ad-t").innerHTML = "<b>" + m.p + "</b><br>" + (lv === 2 ? "Se publicará en: <b>" + m.med + "</b>." : "Arma el banner y publícalo.");
+          chips($("ad-bg"), swItems(PAL.concat([["Blanco", "#ffffff"]])), v => set("bg", v)); chips($("ad-bs"), [{ v: "solid", l: "Sólido" }, { v: "grad", l: "Degradado" }, { v: "diag", l: "Rayas" }], v => { S.bs = v; draw(); });
+          chips($("ad-tc"), [{ c: "#ffffff", v: "#ffffff", l: "Blanco" }, { c: "#16130e", v: "#16130e", l: "Negro" }, { c: "#f5c400", v: "#f5c400", l: "Amarillo" }], v => set("tc", v));
+          chips($("ad-ic"), icItems().filter(x => true), v => set("ic", v));
+          chips($("ad-h"), shuffle(m.h.map((l, i) => ({ l: l, v: i }))), v => set("h", v));
+          chips($("ad-fo"), Object.keys(FNT).map(k => ({ v: k, l: FNT[k][0], h: '<b style="font-family:' + FNT[k][1] + ';font-size:20px">Aa</b><span>' + FNT[k][0] + '</span>' })), v => set("fo", v));
+          chips($("ad-c"), shuffle(m.c.map((l, i) => ({ l: l, v: i }))), v => set("c", v)); chips($("ad-al"), [{ v: "center", l: "Centrado" }, { v: "left", l: "A la izquierda" }], v => { S.al = v; draw(); });
+          chips($("ad-f"), FMT.map(x => ({ l: x[1], v: x[0] })), v => set("f", v));
+          draw();
+        };
+        $("ad-nx").onclick = nw;
+        $("ad-ok").onclick = () => {
+          const f = $("ads-f"), m = list[mi];
+          if (need.some(k => !pk[k])) { f.className = "feedback bad"; f.textContent = "Completa todas las opciones antes de publicar."; return; }
+          const k = cr(S.bg, S.tc), ok = { co: k >= 4.5, h: S.h === 0, c: S.c === 0, ic: (m.ic || []).includes(S.ic), fo: (m.fo || []).includes(S.fo), f: S.f === m.f }, sc = keys.filter(x => ok[x]).length * 10;
+          const T = { co: "Contraste " + (ok.co ? "✓" : "✗") + " (" + k.toFixed(1) + ":1)", h: "Titular " + (ok.h ? "✓ breve y con beneficio" : "✗ largo o vago"), c: "Botón " + (ok.c ? "✓ acción clara" : "✗ poco claro"), ic: "Imagen " + (ok.ic ? "✓ encaja con el producto" : "✗ no se relaciona"), fo: "Tipografía " + (ok.fo ? "✓" : "✗ no refleja la marca"), f: "Formato " + (ok.f ? "✓" : "✗ era " + FMT.find(x => x[0] === m.f)[1]) };
+          f.className = "feedback " + (sc >= keys.length * 6 ? "ok" : "bad"); f.textContent = keys.map(x => T[x]).join(" · ") + " → " + sc + " pts";
+          if (!scored) { scored = true; tot += sc; addPoints(sc); hud("ads", lv, (mi + 1) + "/" + list.length, tot, (mi + 1) / list.length * 100); }
+        };
+        nw();
+      });
+
+      /* =====================================================
+         META PARA GANAR
+         Al llegar a GOAL puntos aparece la pantalla de victoria con confeti.
+         ===================================================== */
+/* ✏️ SE PUEDE EDITAR: GOAL = puntos necesarios para ganar y ver la pantalla de victoria. Cambia el 500 por el número que quieras.
+         ⛔ NO TOCAR: el resto (barra de avance, confeti y victoria).
+         */
+            const GOAL = 500; let won = false;
+      const gbar = document.createElement("div"); gbar.id = "goalbar"; gbar.title = "Avance hacia la meta"; gbar.innerHTML = "<i></i>"; document.body.appendChild(gbar);
+      function showWin() {
+        const w = document.createElement("div"); w.className = "win"; let c = "";
+        for (let i = 0; i < 46; i++) c += '<i class="conf" style="left:' + rand(0, 100) + '%;background:' + pick(["#0090d4", "#e5007d", "#f5c400", "#1d9e5f"]) + ';animation-duration:' + (2.4 + Math.random() * 2.4) + 's;animation-delay:' + (Math.random() * 1.2) + 's"></i>';
+        w.innerHTML = c + '<div class="win-card"><div style="font-size:54px">🏆</div><h2>¡Ganaste!</h2><p>Llegaste a ' + GOAL + ' puntos y ya eres <b>Diseñador/a Estrella</b>. ¡Excelente trabajo!</p><button class="btn" id="win-ok">Seguir jugando</button></div>';
+        document.body.appendChild(w); $("win-ok").onclick = () => w.remove(); gsay("¡Lo lograste! ¡Eres una estrella del diseño!", 8000);
+      }
+      const _ap = addPoints;
+      addPoints = function (n) { _ap(n); gbar.firstChild.style.width = Math.min(100, totalPoints / GOAL * 100) + "%"; if (!won && totalPoints >= GOAL) { won = true; showWin(); } };
+
+
+      /* =====================================================
+         BLOQUE 2: PERSONAJE GUIDO (Lógica de movimiento, arrastre y explicaciones)
+         Modificable: aquí controlas las interacciones de Guido dentro del sitio.
+         ===================================================== */
+/* ⛔ NO TOCAR: lógica de Guido (movimiento, arrastre, caída, sueño). */
+            let GSEEN = {}; try { GSEEN = JSON.parse(localStorage.getItem("guidoSeen") || "{}"); } catch (e) {}
+/* ✏️ SE PUEDE EDITAR: GUIDE = lo que dice Guido al abrir cada juego. Cambia solo el texto entre comillas; no cambies las claves (det, logo, ...). */
+            const GUIDE = { det: "Hay un error escondido en cada pieza. Tócalo para encontrarlo.", logo: "Elige forma, color y tipografía según el reto y toca Entregar.", col: "Elige la dificultad y toca el color correcto.", fab: "Mira la letra y dime a qué estilo tipográfico pertenece.", ads: "Arma el banner: color, titular y botón. ¡Cuida el contraste!", quiz: "Cada pregunta es de un área distinta. ¡Con calma!", timeline: "Toca los hitos en el orden en que ocurrieron.", vf: "Tienes 45 segundos: decide rápido si es verdadero o falso.", hang: "Adivina letra a letra. ¡Usa la pista!" };
+      const gd = document.createElement("div"); gd.className = "guido walk"; gd.setAttribute("aria-hidden", "true");
+      gd.innerHTML = '<svg viewBox="0 0 40 64"><g class="lg1"><rect x="12" y="42" width="7" height="20" rx="3" fill="#0e4dd4"/></g><g class="lg2"><rect x="22" y="42" width="7" height="20" rx="3" fill="#0e4dd4"/></g><g class="a1"><rect x="3" y="24" width="6" height="18" rx="3" fill="#e5007d"/><circle cx="6" cy="43" r="3.6" fill="#a8714a"/></g><g class="a2"><rect x="31" y="24" width="6" height="18" rx="3" fill="#e5007d"/><circle cx="34" cy="43" r="3.6" fill="#a8714a"/></g><rect x="9" y="22" width="22" height="24" rx="7" fill="#e5007d"/><circle cx="20" cy="13" r="11" fill="#a8714a"/><path d="M9 12a11 11 0 0 1 22 0q-11-6-22 0z" fill="#1b1410"/><circle cx="16" cy="15" r="1.7" fill="#16130e"/><circle cx="24" cy="15" r="1.7" fill="#16130e"/><path d="M16 19q4 3 8 0" stroke="#16130e" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>';
+      document.body.appendChild(gd);
+      const gb = document.createElement("div"); gb.className = "gbub hidden"; document.body.appendChild(gb);
+      let gx = 30, gy = 0, gdir = 1, gmode = "walk", ggoal = 0, gup = 1, gpaused = false, goff = false, gtimer = null;
+      let galbum = false, gseekPhase = "", gq = [], gsticky = false, gcur = null, gspr = false; /* galbum = true mientras el álbum está abierto; gseekPhase = "done" cuando Guido ya llegó a su lugar */
+      
+      function gdraw() {
+        gd.style.left = gx + "px"; gd.style.bottom = gy + "px";
+        gd.className = "guido " + (galbum ? "alb " : "") + (gspr ? "spr " : "") + (gstate || (gpaused ? "parked" : gmode)); gd.firstElementChild.style.transform = (!gstate && gmode === "walk" && gdir < 0) ? "scaleX(-1)" : "";
+      }
+      
+      /* ✏️ Cuadros de texto de Guido: al hacer clic sobre uno desaparece, o salta al siguiente si hay otro esperando.
+         Si te equivocas mientras Guido explica un juego, "¡Guido!" aparece primero y después vuelve la explicación. */
+      function gshow(html, ms) {
+        gcur = [html, ms]; gb.innerHTML = '<b>Guido:</b> ' + html; gb.classList.remove("hidden"); clearTimeout(gtimer);
+        gsticky = !!gb.querySelector("#gOk"); const ok = gb.querySelector("#gOk"); if (ok) ok.onclick = e => { e.stopPropagation(); gnext(); };
+        if (ms) gtimer = setTimeout(gnext, ms);
+      }
+      function gnext() { clearTimeout(gtimer); gsticky = false; gcur = null; const n = gq.shift(); if (n) gshow(n[0], n[1]); else gb.classList.add("hidden"); }
+      function gsay(html, ms, urgent) {
+        if (goff) return;
+        if (!gb.classList.contains("hidden") && gsticky) { if (urgent && gcur) { gq.unshift(gcur); gshow(html, ms); } else { gq.push([html, ms]); if (gq.length > 3) gq.pop(); } return; }
+        gshow(html, ms);
+      }
+      gb.addEventListener("click", gnext);
+      
+      function guidoPark(id) {
+        galbum = false; gseekPhase = ""; gq = []; gsticky = false; gd.style.display = goff ? "none" : ""; document.querySelectorAll(".alb-slot.here").forEach(e => e.classList.remove("here"));
+        gpaused = true; gmode = "walk"; gy = 0; gx = innerWidth - 60; gdir = -1; gdraw();
+        if (!GSEEN[id]) { GSEEN[id] = 1; try { localStorage.setItem("guidoSeen", JSON.stringify(GSEEN)); } catch (e) {} gsay(GUIDE[id] + '<br><button class="btn" id="gOk" style="padding:6px 12px;font-size:13px;margin-top:8px">Entendido</button>', 9000); } else gb.classList.add("hidden");
+      }
+      function guidoFree() { if (galbum && gy > 6 && !goff) { gstate = "fall"; gvy = 0; } galbum = false; gseekPhase = ""; gq = []; gsticky = false; gd.style.display = goff ? "none" : ""; document.querySelectorAll(".alb-slot.here").forEach(e => e.classList.remove("here")); gpaused = false; gb.classList.add("hidden"); }
+      
+      setInterval(() => {
+        if (gstate === "fall") { gvy += 1.2; gy -= gvy; if (gy <= 0) { gy = 0; gstate = "lie"; clearTimeout(gtm); gtm = setTimeout(() => { gstate = ""; gmode = "walk"; gidle = Date.now(); guidoAnim("getup"); gdraw(); }, 1800); } gdraw(); return; }
+        if (gstate) return;
+        if (!gdrag && !goff && Date.now() - gidle > 180000) { gstate = "sleep"; gy = 0; gdraw(); return; }
+        if (galbum && !gdrag && !goff) { guidoSeekStep(); gdraw(); return; } /* en el álbum Guido va hacia su lugar */
+        if (gpaused || goff || gdrag) return; const maxX = innerWidth - 44;
+        if (gmode === "walk") {
+          gx += gdir * 2.4;
+          if (gx >= maxX || gx <= 2) { gx = clamp(gx, 2, maxX); gmode = "climb"; ggoal = rand(90, Math.max(120, innerHeight * .5)); gup = 1; }
+          else if (Math.random() < .004) gdir *= -1;
+        } else {
+          gy += gup * 2.2;
+          if (gup === 1 && gy >= ggoal) gup = -1;
+          if (gup === -1 && gy <= 0) { gy = 0; gmode = "walk"; gdir = gx > 10 ? -1 : 1; }
+        }
+        gdraw();
+      }, 40);
+
+      let gdrag = false, gstate = "", gvy = 0, gtm = null, gidle = Date.now();
+      gd.addEventListener("pointerdown", e => { gseekPhase = ""; if (gstate === "sleep") { gsay("¡Ah! Me quedé dormido…", 3000); guidoAnim("wake"); } gstate = ""; clearTimeout(gtm); gidle = Date.now(); gdrag = true; gd.setPointerCapture(e.pointerId); gd.style.cursor = "grabbing"; gd.className = "guido parked"; e.preventDefault(); });
+      gd.addEventListener("pointermove", e => {
+        if (!gdrag) return;
+        gx = clamp(e.clientX - 20, 0, innerWidth - 40); gy = clamp(innerHeight - e.clientY - 32, 0, innerHeight - 70);
+        gd.style.left = gx + "px"; gd.style.bottom = gy + "px";
+      });
+      const gdrop = () => {
+        if (!gdrag) return; gdrag = false; gd.style.cursor = "grab";
+        if (gy > 6) { gstate = "fall"; gvy = 0; } else { gy = 0; if (!gpaused) gmode = "walk"; }
+        gdraw();
+      };
+      gd.addEventListener("pointerup", gdrop); gd.addEventListener("pointercancel", gdrop);
+
+      const gt = document.createElement("button"); gt.className = "back-btn"; gt.textContent = "Guido: sí";
+      gt.onclick = () => { goff = !goff; gt.textContent = "Guido: " + (goff ? "no" : "sí"); gd.style.display = (goff || (galbum && gseekPhase === "done")) ? "none" : ""; if (goff) gb.classList.add("hidden"); };
+      document.querySelector(".topbar").insertBefore(gt, document.querySelector(".score-chip"));
+      gdraw(); 
+
+      /* =====================================================
+         PANTALLA PRINCIPAL DE ACCESO · REGISTRO E INICIO DE SESIÓN (FIREBASE)
+         ===================================================== */
+/* ✏️ SE PUEDE EDITAR (OBLIGATORIO PARA CONFIGURAR): pega aquí los 4 datos de tu proyecto de Firebase.
+         Cambia solo lo que está entre comillas: apiKey, authDomain, projectId y appId. No cambies los nombres de la izquierda.
+         */
+            const firebaseConfig = {
+    apiKey: "AIzaSyBwhAKHGPzdW2NPR-s1PSNhLbnPJOgz6Ko",
+    authDomain: "grafikworld-5dce9.firebaseapp.com",
+    projectId: "grafikworld-5dce9",
+    storageBucket: "grafikworld-5dce9.firebasestorage.app",
+    messagingSenderId: "535676426333",
+    appId: "1:535676426333:web:79892557bd567764a315b4"
+  };
+
+/* ✏️ SE PUEDE EDITAR: mensajes de error del login. Puedes traducir o mejorar los textos; NO cambies los códigos "auth/..." de la izquierda. */
+            const AUTH_ERR = {
+        "auth/invalid-credential": "Correo o contraseña incorrectos.",
+        "auth/invalid-email": "El correo no es válido.",
+        "auth/email-already-in-use": "Ese correo ya tiene una cuenta. Inicia sesión.",
+        "auth/weak-password": "La contraseña debe tener al menos 6 caracteres.",
+        "auth/too-many-requests": "Demasiados intentos. Espera un momento.",
+        "auth/network-request-failed": "Sin conexión con Firebase. Revisa tu internet."
+      };
+
+      let fb = null, authMode = "login";
+      const au = document.createElement("div"); au.className = "auth";
+      au.innerHTML = '<div class="auth-card"><h1>Juegos de Diseño Gráfico</h1><p class="game-sub">Inicia sesión o crea tu cuenta para jugar.</p><div class="auth-tabs" id="au-tabs"></div><div id="au-nameBox"><label for="au-name">Nombre</label><input id="au-name" autocomplete="name"></div><label for="au-mail">Correo</label><input id="au-mail" type="email" autocomplete="email"><label for="au-pass">Contraseña</label><input id="au-pass" type="password" autocomplete="current-password"><p class="auth-msg" id="au-msg" role="alert"></p><button class="btn" id="au-go" style="width:100%">Iniciar sesión</button><button class="btn ghost" id="au-demo" style="width:100%;margin-top:10px">Entrar sin cuenta</button></div>';
+      document.body.appendChild(au);
+/* ⛔ NO TOCAR: lógica de registro, inicio de sesión y salida (setMode, enter, leave, initFirebase).
+         La versión 10.12.2 de Firebase en las URL de gstatic.com solo se cambia si sabes qué versión usar.
+         */
+            const aSay = (t, ok) => { $("au-msg").textContent = t; $("au-msg").style.color = ok ? "inherit" : "#e23b2e"; };
+
+      function setMode(m) {
+        authMode = m; $("au-nameBox").style.display = m === "register" ? "" : "none";
+        $("au-go").textContent = m === "register" ? "Crear cuenta" : "Iniciar sesión";
+        $("au-pass").autocomplete = m === "register" ? "new-password" : "current-password"; aSay("");
+      }
+      chips($("au-tabs"), [{ l: "Iniciar sesión", v: "login" }, { l: "Registrarse", v: "register" }], setMode);
+      $("au-tabs").firstChild.classList.add("sel"); setMode("login");
+
+      const ob = document.createElement("button"); ob.className = "back-btn"; ob.style.display = "none";
+      document.querySelector(".topbar").insertBefore(ob, gt);
+      ob.onclick = () => { if (fb && fb.auth.currentUser) fb.u.signOut(fb.auth); else leave(); };
+
+      function enter(name) {
+        au.classList.add("hidden"); aSay(""); ob.style.display = ""; ob.textContent = "Salir (" + name + ")";
+        gsay("¡Hola, " + name + "! Elige un juego y te explico cómo se juega.", 7000);
+      }
+      function leave() { au.classList.remove("hidden"); ob.style.display = "none"; $("au-pass").value = ""; goHome(); }
+
+      $("au-go").onclick = async () => {
+        const n = $("au-name").value.trim(), m = $("au-mail").value.trim(), p = $("au-pass").value;
+        if (!m || !p) { aSay("Escribe tu correo y tu contraseña."); return; }
+        if (authMode === "register" && !n) { aSay("Escribe tu nombre."); return; }
+        if (!fb) { aSay("Firebase no está conectado. Revisa firebaseConfig o usa el modo de prueba."); return; }
+        try {
+          aSay("Un momento…", true);
+          if (authMode === "register") {
+            const c = await fb.u.createUserWithEmailAndPassword(fb.auth, m, p);
+            await fb.u.updateProfile(c.user, { displayName: n }); enter(n);
+          } else { await fb.u.signInWithEmailAndPassword(fb.auth, m, p); }
+        } catch (e) { aSay(AUTH_ERR[e.code] || "No se pudo completar (" + e.code + ")."); }
+      };
+      ["au-name", "au-mail", "au-pass"].forEach(id => $(id).addEventListener("keydown", e => { if (e.key === "Enter") $("au-go").click(); }));
+      $("au-demo").onclick = () => enter("invitado");
+
+      async function initFirebase() {
+        try {
+          const a = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+          const u = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+          const app = a.initializeApp(firebaseConfig), fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+          fb = { u: u, auth: u.getAuth(app), fs: fs, db: fs.getFirestore(app) };
+          u.onAuthStateChanged(fb.auth, user => { if (user) enter(user.displayName || user.email); else leave(); });
+        } catch (e) { aSay("No se pudo cargar la página. Revisa tu conexión o usa el modo de invitado."); }
+      }
+      if (firebaseConfig.apiKey.indexOf("TU_") === 0) aSay("Firebase aún no está configurado: pega tus datos en firebaseConfig. Mientras tanto usa el modo de prueba.");
+      else initFirebase();
+
+      /* =====================================================
+         RANKING GLOBAL (Firestore)
+         ===================================================== */
+      let rkBase = { total: 0, best: {} }, myBest = {}, rkReady = false, rkTimer = null;
+/* ✏️ SE PUEDE EDITAR: RK_TABS = pestañas del ranking [código del juego, texto visible]. Puedes cambiar el texto visible, no el código.
+         ⛔ NO TOCAR: las funciones de guardado y lectura de Firestore (rkLoad, rkSave, ranking). Si las cambias, el ranking puede dejar de guardar.
+         */
+            const RK_TABS = [["total", "General"], ["det", "Detective"], ["logo", "Logotipos"], ["col", "Colores"], ["fab", "Tipografías"], ["ads", "Banners"]];
+      const rkUser = () => (fb && fb.auth && fb.auth.currentUser) || null;
+      
+      async function rkLoad() {
+        const u = rkUser(); rkReady = false; rkBase = { total: 0, best: {} }; if (!u || !fb.fs) return;
+        try { const d = await fb.fs.getDoc(fb.fs.doc(fb.db, "ranking", u.uid)); if (d.exists()) { const x = d.data(); rkBase = { total: x.total || 0, best: x.best || {} }; } rkReady = true; rkSave(); } catch (e) { rkReady = false; }
+      }
+      
+      function rkSave() {
+        if (!rkReady || !rkUser()) return; clearTimeout(rkTimer);
+        rkTimer = setTimeout(async () => {
+          const u = rkUser(); if (!u) return; const best = Object.assign({}, rkBase.best);
+          Object.keys(myBest).forEach(k => { best[k] = Math.max(best[k] || 0, myBest[k]); });
+          try { await fb.fs.setDoc(fb.fs.doc(fb.db, "ranking", u.uid), { name: u.displayName || (u.email || "jugador").split("@")[0], total: rkBase.total + totalPoints, best: best, updated: fb.fs.serverTimestamp() }, { merge: true }); } catch (e) {}
+        }, 1500);
+      }
+      
+      const _enter = enter; enter = function (name) { _enter(name); rkLoad(); };
+      const _leave = leave; leave = function () { totalPoints = 0; $("totalPoints").textContent = 0; won = false; gbar.firstChild.style.width = "0%"; myBest = {}; rkReady = false; rkBase = { total: 0, best: {} }; _leave(); };
+      const _ap2 = addPoints; addPoints = function (n) { _ap2(n); rkSave(); };
+      const _sb = setBest; setBest = function (id, sc) { _sb(id, sc); myBest[id] = Math.max(myBest[id] || 0, sc); rkSave(); };
+      
+      const rbtn = document.createElement("button"); rbtn.className = "back-btn"; rbtn.textContent = "🏆 Ranking";
+      document.querySelector(".topbar").insertBefore(rbtn, gt); rbtn.onclick = () => openRank();
+
+      /* =====================================================
+         MENÚ DESPLEGABLE DE LA BARRA SUPERIOR
+         ===================================================== */
+      const tb = document.querySelector(".topbar"), menu = document.createElement("div"), menuBtn = document.createElement("button");
+      menu.className = "tb-menu"; menu.id = "tbMenu"; menuBtn.id = "menuBtn"; menuBtn.className = "back-btn"; menuBtn.innerHTML = "☰ <span>Menú</span>";
+      menuBtn.setAttribute("aria-haspopup", "true"); menuBtn.setAttribute("aria-expanded", "false"); menuBtn.setAttribute("aria-controls", "tbMenu");
+      [rbtn, gt, ob].forEach(b => menu.appendChild(b));
+      tb.appendChild(menuBtn); tb.appendChild(menu);
+      const setMenu = open => { menu.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", String(open)); menuBtn.firstChild.textContent = open ? "✕ " : "☰ "; };
+      menuBtn.onclick = e => { e.stopPropagation(); setMenu(!menu.classList.contains("open")); };
+      menu.addEventListener("click", e => { if (e.target.closest("button")) setTimeout(() => setMenu(false), 150); });
+      document.addEventListener("click", e => { if (!tb.contains(e.target)) setMenu(false); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+      
+      function openRank() {
+        const w = document.createElement("div"); w.className = "win"; let tab = "total";
+        w.innerHTML = '<div class="win-card rk-card"><h2>🏆 Ranking</h2><div class="ctl" id="rk-tabs"></div><div id="rk-list"></div><div class="row" style="justify-content:center;margin-top:12px"><button class="btn ghost" id="rk-ref">Actualizar</button><button class="btn" id="rk-x">Cerrar</button></div></div>';
+        document.body.appendChild(w);
+        const load = async () => {
+          const L = $("rk-list"), u = rkUser();
+          if (!fb || !fb.fs) { L.innerHTML = '<p class="nota">El ranking compartido necesita Firebase con Firestore. Por ahora llevas <b>' + totalPoints + ' pts</b> en esta sesión.</p>'; return; }
+          L.innerHTML = '<p class="nota">Cargando…</p>';
+          try {
+            const f = tab === "total" ? "total" : "best." + tab, fs = fb.fs, snap = await fs.getDocs(fs.query(fs.collection(fb.db, "ranking"), fs.orderBy(f, "desc"), fs.limit(20)));
+            const rows = snap.docs.map(d => ({ id: d.id, n: d.data().name || "Jugador", v: tab === "total" ? d.data().total : (d.data().best || {})[tab] }));
+            const mine = u ? (tab === "total" ? rkBase.total + totalPoints : Math.max(rkBase.best[tab] || 0, myBest[tab] || 0)) : 0;
+            L.innerHTML = (rows.length ? rows.map((r, i) => '<div class="rk-row' + (u && r.id === u.uid ? " me" : "") + '"><span class="rk-pos">' + (["🥇", "🥈", "🥉"][i] || (i + 1)) + '</span><span class="rk-name">' + esc(r.n) + '</span><span class="rk-pts">' + r.v + ' pts</span></div>').join("") : '<p class="nota">Aún no hay puntajes. ¡Sé el primero!</p>') + (u ? '<p class="nota">Tus puntos: <b>' + mine + '</b></p>' : '<p class="nota">Inicia sesión con una cuenta para aparecer en el ranking.</p>');
+          } catch (e) { L.innerHTML = '<p class="nota">No se pudo cargar el ranking. Revisa las reglas de Firestore y tu conexión.</p>'; }
+        };
+        chips($("rk-tabs"), RK_TABS.map(t => ({ l: t[1], v: t[0] })), v => { tab = v; load(); }); $("rk-tabs").firstChild.classList.add("sel");
+        $("rk-ref").onclick = load; $("rk-x").onclick = () => w.remove(); w.onclick = e => { if (e.target === w) w.remove(); };
+        load();
+      }
+    </script>
+  
+    <!-- ===== PANTALLA DE BIENVENIDA: se muestra antes del inicio de sesión ===== -->
+    <!-- ✏️ SE PUEDE EDITAR: pantalla de bienvenida. Cambia los textos libremente; mantén los id="splash" y id="splash-go" (los usa el script del final). -->
+    <section class="splash" id="splash" role="dialog" aria-label="Bienvenida a GRAFIKWORLD">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span><span class="blob ring"></span>
+      <div class="splash-inner">
+        <div class="kicker"><span class="cmyk-dots"><i></i><i></i><i></i><i></i></span> GRAFIKWORLD · Art &amp; Mind</div>
+        <h1>Juegos de<br /><span class="w-c">Diseño</span> <span class="w-m">Gráfico</span><br /><span class="w-y">para jugar y aprender</span></h1>
+        <p>Nueve juegos para entrenar el ojo: color, tipografía, logotipos, historia del diseño, impresión, branding y mucho más.</p>
+        <div class="areas" aria-hidden="true"><span>Teoría del color</span><span>Tipografía</span><span>Logotipos</span><span>Branding</span><span>Publicidad</span><span>Ilustración</span></div>
+        <button class="btn go" id="splash-go">Empezar a jugar →</button>
+        <span class="hint">Después podrás iniciar sesión o entrar en modo prueba</span>
+      </div>
+    </section>
+
+    <script>
+      /* =====================================================
+         ÁLBUM DE PERSONAJES (NPC dibujados como Guido, quietos en su lugar; no usa imágenes)
+         ===================================================== */
+      /* ✏️ SE PUEDE EDITAR: el profesor (fila de arriba, solo) y los personajes, en el orden del álbum.
+         Cambia los nombres entre comillas. El último ("Guido") queda como espacio vacío: ahí llega y se queda Guido. */
+      const ALBUM_PROF = "Prof. Sussel";
+      /* ✏️ IMÁGENES DEL ÁLBUM — AQUÍ VA LA IMAGEN DE CADA PERSONAJE.
+         Escribe entre las comillas de cada nombre la ruta de su imagen, por ejemplo "album/rider.png" (guárdalas en una carpeta "album" junto a este index.html).
+         Lo ideal: imagen de cuerpo completo, PNG con fondo transparente y proporción alta (unos 350 x 560 px).
+         Si dejas las comillas vacías ("") o la imagen no se encuentra, se muestra el muñeco de siempre. Puedes llenar solo algunas.
+         El nombre debe ser igual al de las listas de arriba (si cambias un nombre arriba, cámbialo aquí también).
+         La de "Guido" aparece cuando Guido llega a su lugar. */
+      const ALBUM_IMG = {
+        "Prof. Sussel": "album/sussel.png",    /* ← AQUÍ VA la imagen de Prof. Sussel · ejemplo: "album/prof-sussel.png" */
+        "Rider": "",           /* ← AQUÍ VA la imagen de Rider · ejemplo: "album/rider.png" */
+        "Chelo": "",           /* ← AQUÍ VA la imagen de Chelo · ejemplo: "album/chelo.png" */
+        "Erick": "album/erick.png",           /* ← AQUÍ VA la imagen de Erick · ejemplo: "album/erick.png" */
+        "Jairo": "",           /* ← AQUÍ VA la imagen de Jairo · ejemplo: "album/jairo.png" */
+        "Lucia": "",           /* ← AQUÍ VA la imagen de Lucia · ejemplo: "album/lucia.png" */
+        "Chambi": "",          /* ← AQUÍ VA la imagen de Chambi · ejemplo: "album/chambi.png" */
+        "Arturo": "",          /* ← AQUÍ VA la imagen de Arturo · ejemplo: "album/arturo.png" */
+        "Scarlet": "",         /* ← AQUÍ VA la imagen de Scarlet · ejemplo: "album/scarlet.png" */
+        "Elu": "",             /* ← AQUÍ VA la imagen de Elu · ejemplo: "album/elu.png" */
+        "Gringo": "",          /* ← AQUÍ VA la imagen de Gringo · ejemplo: "album/gringo.png" */
+        "Jhoselin": "album/jhoselin.png",        /* ← AQUÍ VA la imagen de Jhoselin · ejemplo: "album/jhoselin.png" */
+        "Alison": "",          /* ← AQUÍ VA la imagen de Alison · ejemplo: "album/alison.png" */
+        "Llanqui": "",         /* ← AQUÍ VA la imagen de Llanqui · ejemplo: "album/llanqui.png" */
+        "Yavi": "",            /* ← AQUÍ VA la imagen de Yavi · ejemplo: "album/yavi.png" */
+        "Gabriela": "album/gaby.png",        /* ← AQUÍ VA la imagen de Gabriela · ejemplo: "album/gabriela.png" */
+        "Ailen": "",           /* ← AQUÍ VA la imagen de Ailen · ejemplo: "album/ailen.png" */
+        "Pallares": "",        /* ← AQUÍ VA la imagen de Pallares · ejemplo: "album/pallares.png" */
+        "Polo": "album/polo.png",            /* ← AQUÍ VA la imagen de Polo · ejemplo: "album/polo.png" */
+        "Poma": "",            /* ← AQUÍ VA la imagen de Poma · ejemplo: "album/poma.png" */
+        "Jimena": "album/jimena.png",          /* ← AQUÍ VA la imagen de Jimena · ejemplo: "album/jimena.png" */
+        "Puma": "album/puma.png",            /* ← AQUÍ VA la imagen de Puma · ejemplo: "album/puma.png" */
+        "Jose": "",            /* ← AQUÍ VA la imagen de Jose · ejemplo: "album/jose.png" */
+        "Rosario": "",         /* ← AQUÍ VA la imagen de Rosario · ejemplo: "album/rosario.png" */
+        "Brandon": "",         /* ← AQUÍ VA la imagen de Brandon · ejemplo: "album/brandon.png" */
+        "Tipolo": "album/tipolo.png",          /* ← AQUÍ VA la imagen de Tipolo · ejemplo: "album/tipolo.png" */
+        "Alexander": "",       /* ← AQUÍ VA la imagen de Alexander · ejemplo: "album/alexander.png" */
+        "Jhosimar": "",        /* ← AQUÍ VA la imagen de Jhosimar · ejemplo: "album/jhosimar.png" */
+        "Guido": "",           /* ← AQUÍ VA la imagen de Guido · ejemplo: "album/guido.png" */
+      };
+      const ALBUM = ["Rider", "Chelo", "Erick", "Jairo", "Lucia", "Chambi", "Arturo", "Scarlet", "Elu", "Gringo", "Jhoselin", "Alison", "Llanqui", "Yavi",
+        "Gabriela", "Ailen", "Pallares", "Polo", "Poma", "Jimena", "Puma", "Jose", "Rosario", "Brandon", "Tipolo", "Alexander", "Jhosimar", "Guido"];
+      /* ✏️ SE PUEDE EDITAR: colores de los NPC. Cada personaje toma un color de cada lista según su posición en el álbum. */
+      const NPC_SKIN = ["#f1c9a5", "#d9a074", "#a8714a", "#7a4b2e"];
+      const NPC_HAIR = ["#1b1410", "#4a2c17", "#8c5a2b", "#c8a24a", "#2b2b2b"];
+      const NPC_SHIRT = ["#00a9e0", "#e5007d", "#ffd200", "#2fb36b", "#7b4bd6", "#ff7a1a", "#e23b2e", "#16a3a3"];
+      const NPC_PANTS = ["#0e4dd4", "#2b2f3a", "#5a3a1f", "#3a4a7a", "#6b2f5a"];
+
+      /* ⛔ NO TOCAR: dibuja a cada NPC con la misma figura de Guido (patas, brazos, cuerpo y cabeza) pero quieto. kind: "" normal, "prof" profesor, "ghost" silueta vacía. */
+      function npcSVG(i, kind) {
+        const prof = kind === "prof", ghost = kind === "ghost";
+        const skin = ghost ? "#a8714a" : NPC_SKIN[(i * 3 + 1) % 4], hair = prof ? "#9a9a9a" : ghost ? "#1b1410" : NPC_HAIR[(i * 2 + i % 3) % 5];
+        const shirt = prof ? "#f4f4f4" : ghost ? "#e5007d" : NPC_SHIRT[i % 8], pants = prof ? "#2b2f3a" : ghost ? "#0e4dd4" : NPC_PANTS[(i * 3) % 5], st = ghost ? 0 : i % 3;
+        const cap = st === 1 ? '<path d="M9 13a11 11 0 0 1 22 0q-4-8-11-8t-11 8z" fill="' + hair + '"/>' : '<path d="M9 12a11 11 0 0 1 22 0q-11-6-22 0z" fill="' + hair + '"/>';
+        return '<svg viewBox="0 0 40 64" aria-hidden="true">' + (st === 2 ? '<rect x="8" y="5" width="24" height="24" rx="10" fill="' + hair + '"/>' : '') +
+          '<rect x="12" y="42" width="7" height="20" rx="3" fill="' + pants + '"/><rect x="22" y="42" width="7" height="20" rx="3" fill="' + pants + '"/>' +
+          '<rect x="3" y="24" width="6" height="18" rx="3" fill="' + (prof ? "#2b2f3a" : shirt) + '"/><circle cx="6" cy="43" r="3.6" fill="' + skin + '"/>' +
+          '<rect x="31" y="24" width="6" height="18" rx="3" fill="' + (prof ? "#2b2f3a" : shirt) + '"/><circle cx="34" cy="43" r="3.6" fill="' + skin + '"/>' +
+          '<rect x="9" y="22" width="22" height="24" rx="7" fill="' + shirt + '"/>' + (prof ? '<path d="M20 25l3 5-3 15-3-15z" fill="#0e4dd4"/>' : '') +
+          '<circle cx="20" cy="13" r="11" fill="' + skin + '"/>' + cap +
+          '<circle cx="16" cy="15" r="1.7" fill="#16130e"/><circle cx="24" cy="15" r="1.7" fill="#16130e"/><path d="M16 19q4 3 8 0" stroke="#16130e" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
+          (prof ? '<circle cx="16" cy="15" r="4" fill="none" stroke="#16130e" stroke-width="1.1"/><circle cx="24" cy="15" r="4" fill="none" stroke="#16130e" stroke-width="1.1"/><path d="M20 15h0.01" stroke="#16130e" stroke-width="1.1"/>' : '') + '</svg>';
+      }
+      function albSlot(name, idx, kind) {
+        const el = document.createElement("div"); el.className = "alb-slot" + (kind === "prof" ? " solo" : "");
+        if (kind === "ghost") el.dataset.guido = "1";
+        el.innerHTML = '<div class="alb-name">' + name + '</div><div class="alb-fig' + (kind === "ghost" ? " ghost" : "") + '">' + npcSVG(idx, kind) + '</div>';
+        const src = ALBUM_IMG[name]; /* ⛔ si el personaje tiene imagen y carga bien, reemplaza al muñeco (la de Guido se muestra cuando él llega) */
+        if (src) { const im = new Image(); im.alt = name; im.onload = () => { const f = el.querySelector(".alb-fig"); if (kind === "ghost") { f.classList.add("has-img"); f.appendChild(im); } else { f.innerHTML = ""; f.appendChild(im); } }; im.src = src; }
+        return el;
+      }
+      function renderAlbum() {
+        const root = $("albumRoot"), cols = innerWidth >= 700 ? 7 : 4; root.innerHTML = "";
+        const r0 = document.createElement("div"); r0.className = "alb-row solo"; r0.appendChild(albSlot(ALBUM_PROF, 0, "prof")); root.appendChild(r0);
+        for (let i = 0; i < ALBUM.length; i += cols) {
+          const row = document.createElement("div"); row.className = "alb-row"; row.style.setProperty("--cols", cols);
+          ALBUM.slice(i, i + cols).forEach((n, k) => row.appendChild(albSlot(n, i + k + 1, n === "Guido" ? "ghost" : "")));
+          root.appendChild(row);
+        }
+        if (galbum && gseekPhase === "done") { const sl = document.querySelector(".alb-slot[data-guido]"); if (sl) sl.classList.add("here"); }
+      }
+      { const mq = matchMedia("(min-width:700px)"), f = () => { if ($("game-album").classList.contains("open")) renderAlbum(); }; if (mq.addEventListener) mq.addEventListener("change", f); else if (mq.addListener) mq.addListener(f); }
+
+      /* ⛔ NO TOCAR: Guido sube por la pared y camina por la repisa hasta su espacio, esté donde esté (se recalcula si haces scroll o cambias el tamaño).
+         Al llegar se queda quieto en su lugar, en silencio. */
+      function albumTarget() {
+        const slot = document.querySelector(".alb-slot[data-guido]"), row = slot && slot.closest(".alb-row"); if (!slot || !row) return null;
+        const r = row.getBoundingClientRect(), d = slot.querySelector(".alb-fig").getBoundingClientRect();
+        return { x: d.left, w: d.width, y: innerHeight - (r.bottom - 10) }; /* x = borde izquierdo de su espacio; y = distancia desde el borde inferior de la pantalla hasta la repisa */
+      }
+      function guidoSeekStart() {
+        galbum = true; gseekPhase = "going"; gpaused = false; gmode = "walk"; gup = 1; gidle = Date.now(); if (gstate === "sleep") gstate = "";
+        gq = []; gsticky = false; gb.classList.add("hidden"); gd.style.display = goff ? "none" : ""; /* sin cuadros de texto en el álbum */
+        setTimeout(() => { if (galbum) albumScrollHint(); }, 900);
+      }
+      let gseekHintT = 0; /* evita pedir el scroll muchas veces seguidas */
+      function albumScrollHint() { /* si el espacio de Guido no se ve en pantalla, baja o sube la página suavemente hasta mostrarlo */
+        const t = document.querySelector(".alb-slot[data-guido]"); if (!t) return;
+        const b = t.closest(".alb-row").getBoundingClientRect().bottom; if (b > innerHeight - 20 || b < 90) scrollBy({ top: b - innerHeight + 90, behavior: "smooth" });
+      }
+      function guidoSeekStep() {
+        const t = albumTarget(); if (!t) return;
+        const maxX = innerWidth - t.w - 4, ty = clamp(t.y, 0, innerHeight - 70), tx = clamp(t.x, 2, maxX);
+        const vis = t.y >= -4 && t.y <= innerHeight - 70; /* ¿su espacio se ve en pantalla? */
+        if (gseekPhase === "done") { gx = tx; gy = ty; gmode = "walk"; gpaused = true; return; }
+        if (!vis && Date.now() - gseekHintT > 1500) { gseekHintT = Date.now(); albumScrollHint(); }
+        gpaused = false;
+        const atWall = gx <= 3 || gx >= maxX - 1;
+        if (atWall && gy < ty - 3) { gmode = "climb"; gup = 1; gy = Math.min(gy + 5, ty); return; }              /* 2) trepa por la pared */
+        if (!atWall && gy < 3 && ty > 6) {                                                                      /* 1) camina por el suelo hasta la pared */
+          const wx = tx < innerWidth / 2 ? 2 : maxX; gmode = "walk"; gdir = wx > gx ? 1 : -1; gx += gdir * 10;
+          if ((gdir > 0 && gx >= wx) || (gdir < 0 && gx <= wx)) gx = wx; return;
+        }
+        gmode = "walk"; gy += clamp(ty - gy, -8, 8);                                                           /* 3) camina por la repisa hasta su espacio */
+        const dx = tx - gx; gdir = dx >= 0 ? 1 : -1;
+        if (vis && Math.abs(dx) <= 3 && Math.abs(ty - gy) <= 3) {                                               /* llega, queda en posición y no dice nada */
+          gx = tx; gy = ty; gseekPhase = "done"; gpaused = true; const sl = document.querySelector(".alb-slot[data-guido]"); if (sl) sl.classList.add("here");
+          gd.style.display = "none"; /* el Guido que se mueve desaparece: queda su figura estática en el espacio, igual que los demás */
+        } else gx += gdir * Math.min(6, Math.abs(dx));
+      }
+    </script>
+
+    <script>
+      /* =====================================================
+         EASTER EGG: 4 clics en los puntos de colores de la barra superior
+         ===================================================== */
+      /* ✏️ SE PUEDE EDITAR: EGG_CLICKS = cuántos clics hacen falta; EGG_GAP = tiempo máximo (en milisegundos) entre un clic y el siguiente.
+         Sirve cualquier combinación de los 4 puntos (cian, magenta, amarillo y negro). */
+      const EGG_CLICKS = 4, EGG_GAP = 5000;
+      /* ✏️ SE PUEDE EDITAR: lo que dice Guido al encontrarlo (primera vez / las siguientes). */
+      const EGG_MSG = "¡Encontraste un easter egg! Ya está en el menú de juegos.", EGG_MSG2 = "El easter egg ya está en el menú de juegos.";
+      /* ⛔ NO TOCAR: cuenta los clics y muestra la tarjeta del álbum. Para volver a esconderla, borra "grafikEgg" del almacenamiento del navegador. */
+      (function () {
+        let n = 0, last = 0;
+        document.querySelectorAll(".topbar .cmyk-dots i").forEach(dot => dot.addEventListener("click", e => {
+          e.stopPropagation(); dot.classList.remove("tap"); void dot.offsetWidth; dot.classList.add("tap");
+          const now = Date.now(); n = now - last > EGG_GAP ? 1 : n + 1; last = now;
+          if (n >= EGG_CLICKS) { n = 0; unlock(); }
+        }));
+        function unlock() {
+          const ab = document.querySelector('[data-play="album"]'), cd = ab && ab.closest(".card"); if (!cd) return;
+          const first = cd.style.display === "none";
+          cd.style.display = ""; try { localStorage.setItem("grafikEgg", "1"); } catch (e) {}
+          cd.classList.remove("egg-new"); void cd.offsetWidth; cd.classList.add("egg-new");
+          if (!$("homeView").classList.contains("hidden")) cd.scrollIntoView({ behavior: "smooth", block: "center" });
+          gsay(first ? EGG_MSG : EGG_MSG2, 6000, true);
+        }
+      })();
+    </script>
+
+    <script>
+      /* =====================================================
+         IMÁGENES DE GUIDO — AQUÍ VA CADA IMAGEN (64 en total)
+         ===================================================== */
+      /* ✏️ SE PUEDE EDITAR. Cómo usarlo:
+         1) Crea una carpeta llamada "guido" junto a este index.html.
+         2) Guarda ahí las imágenes (PNG de 256 x 256, fondo transparente) con los nombres de la lista de abajo.
+            Cada nombre tiene al lado un comentario "← AQUÍ VA la imagen N de M" que dice qué dibujo es.
+         3) Cambia GUIDO_IMAGENES a true y recarga la página (Ctrl + F5).
+         Si algo falla, Guido te lo dice en pantalla y la consola (F12) muestra qué archivo no se encontró.
+         Con GUIDO_IMAGENES en false todo funciona con el dibujo de siempre. */
+      const GUIDO_IMAGENES = false;
+      const GUIDO_CARPETA = "guido/";   /* carpeta donde están las imágenes */
+      const GUIDO_EXT = ".png";         /* extensión de tus archivos: ".png", ".jpg", ".webp"... (a los nombres de abajo se les agrega esto) */
+      /* ✏️ MODO PRUEBA: escribe la ruta de UNA sola imagen y Guido la usará para TODAS las animaciones (quieto, caminar, trepar, etc.), sin moverse de pose.
+         Sirve para comprobar que todo funciona antes de tener las 64 imágenes. Ejemplo: "guido/prueba.png". Déjalo vacío ("") para usar la lista de abajo. */
+      const GUIDO_IMAGEN_UNICA = "";
+      /* fps = cuadros por segundo · loop = se repite · hold = al terminar se queda en la última imagen mientras dure el estado.
+         Si a una animación le faltan algunas imágenes, se usan las que sí existen; si no existe ninguna, esa animación usa el dibujo de siempre. */
+      const GUIDO_ANIM = {
+      /* ---------- QUIETO (6 imágenes) · 6 fps · cuando está parado ---------- */
+      idle: { fps: 6, loop: true, hold: false, frames: [
+        "guido_idle_01", /* ← AQUÍ VA la imagen 1 de 6 (guido_idle_01.png): Postura base: de pie, brazos relajados, ojos abiertos */
+        "guido_idle_02", /* ← AQUÍ VA la imagen 2 de 6 (guido_idle_02.png): Inhala: hombros y cabeza suben unos 2 px */
+        "guido_idle_03", /* ← AQUÍ VA la imagen 3 de 6 (guido_idle_03.png): Punto más alto de la respiración */
+        "guido_idle_04", /* ← AQUÍ VA la imagen 4 de 6 (guido_idle_04.png): Exhala: hombros y cabeza bajan */
+        "guido_idle_05", /* ← AQUÍ VA la imagen 5 de 6 (guido_idle_05.png): Parpadeo: ojos cerrados */
+        "guido_idle_06" /* ← AQUÍ VA la imagen 6 de 6 (guido_idle_06.png): Ojos abiertos, cabeza inclinada 1 grado (casi igual a la 1) */
+      ] },
+      /* ---------- CAMINAR (8 imágenes) · 12 fps · cuando camina ---------- */
+      walk: { fps: 12, loop: true, hold: false, frames: [
+        "guido_walk_01", /* ← AQUÍ VA la imagen 1 de 8 (guido_walk_01.png): Contacto A: pierna derecha adelante, talón en el suelo */
+        "guido_walk_02", /* ← AQUÍ VA la imagen 2 de 8 (guido_walk_02.png): Bajada A: el cuerpo en su punto más bajo */
+        "guido_walk_03", /* ← AQUÍ VA la imagen 3 de 8 (guido_walk_03.png): Paso A: la pierna trasera pasa junto a la de apoyo */
+        "guido_walk_04", /* ← AQUÍ VA la imagen 4 de 8 (guido_walk_04.png): Subida A: el cuerpo en su punto más alto */
+        "guido_walk_05", /* ← AQUÍ VA la imagen 5 de 8 (guido_walk_05.png): Contacto B: igual a la 1 con los lados invertidos */
+        "guido_walk_06", /* ← AQUÍ VA la imagen 6 de 8 (guido_walk_06.png): Bajada B: igual a la 2 invertida */
+        "guido_walk_07", /* ← AQUÍ VA la imagen 7 de 8 (guido_walk_07.png): Paso B: igual a la 3 invertida */
+        "guido_walk_08" /* ← AQUÍ VA la imagen 8 de 8 (guido_walk_08.png): Subida B: igual a la 4 invertida (lleva a la 1) */
+      ] },
+      /* ---------- TREPAR (8 imágenes) · 12 fps · solo la SUBIDA (para bajar se reproduce al revés) ---------- */
+      climb: { fps: 12, loop: true, hold: false, frames: [
+        "guido_climb_01", /* ← AQUÍ VA la imagen 1 de 8 (guido_climb_01.png): Brazo derecho arriba agarrado, pierna izquierda subiendo */
+        "guido_climb_02", /* ← AQUÍ VA la imagen 2 de 8 (guido_climb_02.png): Se impulsa: el brazo derecho se dobla y el cuerpo sube */
+        "guido_climb_03", /* ← AQUÍ VA la imagen 3 de 8 (guido_climb_03.png): El brazo izquierdo sube hacia el siguiente agarre */
+        "guido_climb_04", /* ← AQUÍ VA la imagen 4 de 8 (guido_climb_04.png): Brazo izquierdo arriba agarrado, pierna derecha subiendo */
+        "guido_climb_05", /* ← AQUÍ VA la imagen 5 de 8 (guido_climb_05.png): Igual a la 1 con los lados invertidos */
+        "guido_climb_06", /* ← AQUÍ VA la imagen 6 de 8 (guido_climb_06.png): Igual a la 2 invertida */
+        "guido_climb_07", /* ← AQUÍ VA la imagen 7 de 8 (guido_climb_07.png): Igual a la 3 invertida */
+        "guido_climb_08" /* ← AQUÍ VA la imagen 8 de 8 (guido_climb_08.png): Igual a la 4 invertida (lleva a la 1) */
+      ] },
+      /* ---------- AGARRADO (4 imágenes) · 8 fps · cuando lo sostienes con el dedo o el mouse ---------- */
+      drag: { fps: 8, loop: true, hold: false, frames: [
+        "guido_drag_01", /* ← AQUÍ VA la imagen 1 de 4 (guido_drag_01.png): Cuelga recto, brazos abajo, cara de sorpresa */
+        "guido_drag_02", /* ← AQUÍ VA la imagen 2 de 4 (guido_drag_02.png): Balanceo a la izquierda (cuerpo girado unos 8 grados) */
+        "guido_drag_03", /* ← AQUÍ VA la imagen 3 de 4 (guido_drag_03.png): Regresa al centro, piernas un poco separadas */
+        "guido_drag_04" /* ← AQUÍ VA la imagen 4 de 4 (guido_drag_04.png): Balanceo a la derecha (espejo de la 2) */
+      ] },
+      /* ---------- CAYENDO (4 imágenes) · 12 fps · cuando lo sueltas en el aire ---------- */
+      fall: { fps: 12, loop: true, hold: false, frames: [
+        "guido_fall_01", /* ← AQUÍ VA la imagen 1 de 4 (guido_fall_01.png): Brazos arriba y abiertos, piernas flexionadas, boca abierta */
+        "guido_fall_02", /* ← AQUÍ VA la imagen 2 de 4 (guido_fall_02.png): Brazos más arriba, piernas estiradas hacia abajo */
+        "guido_fall_03", /* ← AQUÍ VA la imagen 3 de 4 (guido_fall_03.png): Un brazo arriba y el otro al costado, piernas pataleando */
+        "guido_fall_04" /* ← AQUÍ VA la imagen 4 de 4 (guido_fall_04.png): Contrario de la 2 (lleva a la 1) */
+      ] },
+      /* ---------- ESTRELLARSE DE CARA (8 imágenes) · 12 fps · una vez; la última se mantiene mientras está en el suelo; desde la 3 va ACOSTADO ---------- */
+      faceplant: { fps: 12, loop: false, hold: true, frames: [
+        "guido_faceplant_01", /* ← AQUÍ VA la imagen 1 de 8 (guido_faceplant_01.png): Un instante antes del impacto, inclinado hacia adelante */
+        "guido_faceplant_02", /* ← AQUÍ VA la imagen 2 de 8 (guido_faceplant_02.png): Impacto: la cabeza toca el suelo, líneas de golpe */
+        "guido_faceplant_03", /* ← AQUÍ VA la imagen 3 de 8 (guido_faceplant_03.png): Se desploma pasando la horizontal, piernas rebotan */
+        "guido_faceplant_04", /* ← AQUÍ VA la imagen 4 de 8 (guido_faceplant_04.png): Rebote: se levanta un poco, piernas en el aire */
+        "guido_faceplant_05", /* ← AQUÍ VA la imagen 5 de 8 (guido_faceplant_05.png): Cae otra vez: horizontal, boca abajo */
+        "guido_faceplant_06", /* ← AQUÍ VA la imagen 6 de 8 (guido_faceplant_06.png): Acostado quieto, ojos de mareado */
+        "guido_faceplant_07", /* ← AQUÍ VA la imagen 7 de 8 (guido_faceplant_07.png): Igual a la 6 con un temblor leve en una mano */
+        "guido_faceplant_08" /* ← AQUÍ VA la imagen 8 de 8 (guido_faceplant_08.png): Igual a la 6 con estrellitas sobre la cabeza (se mantiene) */
+      ] },
+      /* ---------- LEVANTARSE (6 imágenes) · 10 fps · una vez; justo después de estrellarse ---------- */
+      getup: { fps: 10, loop: false, hold: false, frames: [
+        "guido_getup_01", /* ← AQUÍ VA la imagen 1 de 6 (guido_getup_01.png): Acostado boca abajo, manos junto a los hombros */
+        "guido_getup_02", /* ← AQUÍ VA la imagen 2 de 6 (guido_getup_02.png): Empuja con los brazos: el torso se levanta */
+        "guido_getup_03", /* ← AQUÍ VA la imagen 3 de 6 (guido_getup_03.png): Una rodilla se dobla bajo el cuerpo */
+        "guido_getup_04", /* ← AQUÍ VA la imagen 4 de 6 (guido_getup_04.png): Apoyado en una rodilla, una mano en la otra rodilla */
+        "guido_getup_05", /* ← AQUÍ VA la imagen 5 de 6 (guido_getup_05.png): Se endereza y se sacude con los brazos */
+        "guido_getup_06" /* ← AQUÍ VA la imagen 6 de 6 (guido_getup_06.png): De pie, sacude la cabeza (casi igual a quieto 1) */
+      ] },
+      /* ---------- DORMIDO (4 imágenes) · 4 fps · se repite; ACOSTADO boca arriba (las Z z z las pone el código) ---------- */
+      sleep: { fps: 4, loop: true, hold: false, frames: [
+        "guido_sleep_01", /* ← AQUÍ VA la imagen 1 de 4 (guido_sleep_01.png): Boca arriba, ojos cerrados, pecho abajo */
+        "guido_sleep_02", /* ← AQUÍ VA la imagen 2 de 4 (guido_sleep_02.png): El pecho sube un poco, boca entreabierta */
+        "guido_sleep_03", /* ← AQUÍ VA la imagen 3 de 4 (guido_sleep_03.png): Pecho en su punto más alto, una mano se mueve */
+        "guido_sleep_04" /* ← AQUÍ VA la imagen 4 de 4 (guido_sleep_04.png): El pecho baja (lleva a la 1) */
+      ] },
+      /* ---------- DESPERTAR (4 imágenes) · 10 fps · una vez; cuando lo tocas dormido ---------- */
+      wake: { fps: 10, loop: false, hold: false, frames: [
+        "guido_wake_01", /* ← AQUÍ VA la imagen 1 de 4 (guido_wake_01.png): Ojos abiertos de golpe, salta del susto */
+        "guido_wake_02", /* ← AQUÍ VA la imagen 2 de 4 (guido_wake_02.png): Se incorpora sentado, brazos arriba */
+        "guido_wake_03", /* ← AQUÍ VA la imagen 3 de 4 (guido_wake_03.png): Sentado, se frota un ojo */
+        "guido_wake_04" /* ← AQUÍ VA la imagen 4 de 4 (guido_wake_04.png): Casi de pie, medio dormido (lleva a quieto 1) */
+      ] },
+      /* ---------- ERROR (SE EQUIVOCA) (6 imágenes) · 10 fps · una vez; cuando el jugador falla una respuesta ---------- */
+      error: { fps: 10, loop: false, hold: false, frames: [
+        "guido_error_01", /* ← AQUÍ VA la imagen 1 de 6 (guido_error_01.png): Congelado de sorpresa, manos subiendo a los lados de la cara */
+        "guido_error_02", /* ← AQUÍ VA la imagen 2 de 6 (guido_error_02.png): Una mano sube hacia la frente */
+        "guido_error_03", /* ← AQUÍ VA la imagen 3 de 6 (guido_error_03.png): Facepalm completo: la palma cubre la cara */
+        "guido_error_04", /* ← AQUÍ VA la imagen 4 de 6 (guido_error_04.png): Sacude la cabeza lentamente hacia la izquierda */
+        "guido_error_05", /* ← AQUÍ VA la imagen 5 de 6 (guido_error_05.png): Sacude la cabeza hacia la derecha (suspiro) */
+        "guido_error_06" /* ← AQUÍ VA la imagen 6 de 6 (guido_error_06.png): Baja la mano, cara resignada (lleva a quieto 1) */
+      ] },
+      /* ---------- CELEBRACIÓN (ACIERTA) (6 imágenes) · 12 fps · una vez; cuando el jugador acierta una respuesta ---------- */
+      celebrate: { fps: 12, loop: false, hold: false, frames: [
+        "guido_celebrate_01", /* ← AQUÍ VA la imagen 1 de 6 (guido_celebrate_01.png): Se agacha para tomar impulso, sonrisa grande */
+        "guido_celebrate_02", /* ← AQUÍ VA la imagen 2 de 6 (guido_celebrate_02.png): Salta: los pies se despegan del suelo */
+        "guido_celebrate_03", /* ← AQUÍ VA la imagen 3 de 6 (guido_celebrate_03.png): Punto más alto: brazos en V, ojos cerrados con sonrisa */
+        "guido_celebrate_04", /* ← AQUÍ VA la imagen 4 de 6 (guido_celebrate_04.png): Empieza a caer, piernas estiradas */
+        "guido_celebrate_05", /* ← AQUÍ VA la imagen 5 de 6 (guido_celebrate_05.png): Aterriza con las rodillas flexionadas */
+        "guido_celebrate_06" /* ← AQUÍ VA la imagen 6 de 6 (guido_celebrate_06.png): Pose de victoria: puño en alto y guiño (lleva a quieto 1) */
+      ] }
+      };
+
+      /* ⛔ NO TOCAR: reproduce las imágenes de arriba en lugar del dibujo cuando GUIDO_IMAGENES es true. */
+      function guidoAnim(name) { /* lo usan los eventos "getup", "wake", "error" y "celebrate" (no hace nada si no hay imágenes) */ }
+      (function () {
+        if (!GUIDO_IMAGENES) return;
+        const ready = {}, names = Object.keys(GUIDO_ANIM), el = document.createElement("img"); let firstBad = "";
+        el.className = "gimg"; el.alt = ""; el.draggable = false; gd.appendChild(el);
+        function load(path, done) { const im = new Image(); im.onload = () => { im.ok = true; done(); }; im.onerror = () => { if (!firstBad) firstBad = path; console.warn("Guido: no encontré la imagen " + path); done(); }; im.src = path; return im; }
+        let pend = names.length;
+        function settle() {
+          if (--pend > 0) return; const ok = names.filter(n => ready[n]);
+          console.info("Guido: animaciones con imágenes → " + (ok.join(", ") || "ninguna") + (ok.length < names.length ? " | sin imágenes (usan el dibujo normal) → " + names.filter(n => !ready[n]).join(", ") : ""));
+          if (!ok.length) gsay("No pude cargar las imágenes de Guido. Primer archivo que no encontré: «" + firstBad + "». Revisa la carpeta, el nombre y la extensión.", 15000, true);
+        }
+        if (GUIDO_IMAGEN_UNICA) {
+          const solo = load(GUIDO_IMAGEN_UNICA, () => { if (solo.ok) names.forEach(n => { GUIDO_ANIM[n].list = [solo]; ready[n] = true; }); pend = 1; settle(); });
+        } else {
+          names.forEach(n => { const a = GUIDO_ANIM[n]; let left = a.frames.length;
+            a.imgs = a.frames.map(f => load(GUIDO_CARPETA + f + GUIDO_EXT, () => { if (--left === 0) { a.list = a.imgs.filter(i => i.ok); if (a.list.length) ready[n] = true; settle(); } })); });
+        }
+        let one = null, cur = "", t0 = 0, shown = "";
+        guidoAnim = function (name) { if (ready[name]) { one = name; cur = ""; } };
+        function want() {
+          if (one) return one;
+          if (gstate === "sleep") return "sleep"; if (gstate === "lie") return "faceplant"; if (gstate === "fall") return "fall";
+          if (gdrag) return "drag"; if (gpaused) return "idle";
+          return gmode === "climb" ? "climb" : "walk";
+        }
+        function spr(on) { gspr = on; gd.classList.toggle("spr", on); }
+        setInterval(() => {
+          if (gd.style.display === "none") return;
+          const name = want(), a = GUIDO_ANIM[name];
+          if (!ready[name]) { one = null; spr(false); return; }
+          const now = Date.now(); if (name !== cur) { cur = name; t0 = now; }
+          const n = a.list.length; let i = Math.floor((now - t0) * a.fps / 1000);
+          if (one) { if (i >= n) { one = null; cur = ""; return; } }
+          else if (a.loop) i = i % n; else if (i >= n) i = n - 1;
+          if (name === "climb" && gup < 0) i = n - 1 - i;
+          const src = a.list[i].src; if (shown !== src) { el.src = src; shown = src; }
+          el.style.transform = (name === "climb" ? gx < innerWidth / 2 : gdir < 0) ? "scaleX(-1)" : "none";
+          spr(true);
+        }, 50);
+        /* aciertos y errores: una sola reacción por respuesta (celebra o se lamenta) */
+        let busy = false;
+        new MutationObserver(list => {
+          if (busy) return; let res = "";
+          list.forEach(m => { const t = m.target; if (t.classList && t.classList.contains("feedback")) { if (t.classList.contains("bad")) res = "error"; else if (t.classList.contains("ok") && !res) res = "celebrate"; } });
+          if (!res) return; busy = true; setTimeout(() => { busy = false; }, 400); guidoAnim(res);
+        }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["class"] });
+      })();
+    </script>
+
+    <script>
+      /* ✏️ SE PUEDE EDITAR: frases que dice Guido cuando te equivocas (elige una al azar). Agrega o cambia las que quieras. */
+      const GUIDO_FAILS = ["¡Guido!", "¡Tenías que ser Guido!"];
+      /* ⛔ NO TOCAR: detecta cualquier respuesta incorrecta de los juegos (los mensajes "feedback bad") y hace hablar a Guido.
+         Si el usuario apagó a Guido con el botón "Guido: no", no dice nada. */
+      (function () {
+        var last = -1, busy = false;
+        new MutationObserver(function (list) {
+          if (busy) return;
+          var fail = list.some(function (m) { var t = m.target; return t.classList && t.classList.contains("feedback") && t.classList.contains("bad"); });
+          if (!fail) return;
+          busy = true; setTimeout(function () { busy = false; }, 400);
+          var k; do { k = Math.floor(Math.random() * GUIDO_FAILS.length); } while (GUIDO_FAILS.length > 1 && k === last);
+          last = k; gsay(GUIDO_FAILS[k], 2500, true);
+        }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["class"] });
+      })();
+    </script>
+    <script>
+      /* ✏️ AQUÍ VA EL LOGO: escribe entre las comillas la ruta de tu imagen, por ejemplo "logo.png" (guárdala junto a este index.html).
+         Sirve una imagen cuadrada (PNG con fondo transparente, unos 200 x 200 px). Mientras esté vacío ("") se ve el cuadro vacío de la barra superior.
+         Si la imagen no se encuentra, también se queda el cuadro vacío. */
+      const LOGO_IMG = "./logo/logo.png";
+      /* ⛔ NO TOCAR: coloca la imagen dentro del cuadro del logo. */
+      (function () {
+        const b = document.getElementById("tbLogo"); if (!b || !LOGO_IMG) return;
+        const im = new Image(); im.alt = "Logo de GRAFIKWORLD"; im.onload = () => { b.classList.add("has-img"); b.appendChild(im); }; im.src = LOGO_IMG;
+      })();
+    </script>
+    <script>
+      /* Pantalla de bienvenida: se cierra con el botón o con Enter y deja ver el inicio de sesión */
+/* ⛔ NO TOCAR: solo lo necesario para cerrar la pantalla de bienvenida (botón / Enter). Los textos se editan en el HTML de arriba. */
+            (function () {
+        var s = document.getElementById("splash"), b = document.getElementById("splash-go");
+        if (!s || !b) return;
+        b.focus({ preventScroll: true });
+        function close() { s.classList.add("out"); document.removeEventListener("keydown", onKey); setTimeout(function () { s.remove(); }, 600); }
+        function onKey(e) { if (e.key === "Enter") { e.preventDefault(); close(); } } /* solo Enter: la barra espaciadora queda libre para bajar */
+        b.addEventListener("click", close); document.addEventListener("keydown", onKey);
+      })();
+    </script>
+  </body>
+</html>
